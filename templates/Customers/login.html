@@ -23,7 +23,7 @@
         <section class="section-conten padding-y" style="min-height:84vh; ">
 
               <div class="card mx-auto mt-5" style="max-width: 380px; background-image: url( '{% static 'img/tomatoes.jpg' %}')  ;">
-                  <div class="card-body" style="background-color: rgb(204, 204, 204);">
+                  <div class="card-body" style="background-color: rgb(255, 255, 255);">
                   <h2 class="card-title mb-4 text-center">Sign in</h2>
                   <form action="" method="post">
                     {% csrf_token %}
@@ -46,7 +46,7 @@
 
                   </form>
                   {% if messages %}
-                  <ul class="messages">
+                  <ul class="messages" id="msg">
                     {% for message in messages %}
                                     
                       <div class="alert alert-success alert-dismissiblen ">
@@ -56,7 +56,7 @@
                     {% endfor %}
                   </ul>
                   {% endif %}
-                  <p class="text-center"> <a href="{% url 'otpLogin' %}">Click Here for OTP login</a></p>
+                  <p class="text-center"> <a href="{% url 'otpLogin' %}" style="">Click Here for OTP login</a></p>
                         
                   <p class="text-center"><a href=""></a></p>
                   </div> 

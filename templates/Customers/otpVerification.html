@@ -10,7 +10,7 @@
                         <div class="breadcrumb__text">
                             <h2>Login</h2>
                             <div class="breadcrumb__option">
-                                <a href="./index.html">Home</a>
+                                <a href="{% url 'home' %}">Home</a>
                                 <span>Login</span>
                             </div>
                         </div>
@@ -44,9 +44,9 @@
             </div>
             <div class="text-center mt-3">
                 <span class="d-block mobile-text"
-                    >Don not received the code?</span
-                ><span class="font-weight-bold text-primary cursor"
-                    >Resend</span
+                    >Did not receive the code?</span
+                ><span class="font-weight-bold text-primary cursor" 
+                    > <a href=""> Resend </a></span
                 >
                 {% for message in messages %}
                 <hr />

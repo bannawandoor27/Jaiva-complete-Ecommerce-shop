@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<!-- Breadcrumb Section Begin -->
+<div class="">
+    <section class="breadcrumb-section set-bg ">
+        <div class="container set-bg w-100 set-bg p-4 mt-0  "
+            style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
+            <div class="row ">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Profile</h2>
+                        <div class="breadcrumb__option">
+                            <a href="./index.html">Home</a>
+                            <span>Profile</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Breadcrumb Section End -->
+
+<!-- Profile section starts here -->
+
+<section>
+<div class="container" >
+    <form method="POST" action="{% url 'profile' %}">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4" style="font-size:larger">First name</label>
+                {{user_form.first_name}}
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputPassword4" style="font-size:larger">Last name</label>
+                {{user_form.last_name}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputAddress" style="font-size:larger">Address line 1</label>
+            {{address_form.address_line_1}}
+        </div>
+        <div class="form-group">
+            <label for="inputAddress2" style="font-size:larger">Address line 2</label>
+            {{address_form.address_line_2}}
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputCity" style="font-size:larger">City</label>
+                {{address_form.city}}
+            </div>
+            
+                <div class="form-group col-md-4">
+                    <label for="inputCity">District</label>
+                    {{address_form.district}}
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputState" style="font-size:larger">State</label>
+                    {{address_form.state}}
+                </div>
+            
+            
+                <div class="form-group col-md-4">
+                    <label for="inputCity" style="font-size:larger">Country</label>
+                    {{address_form.country}}
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputState" style="font-size:larger">Pincode</label>
+                    {{address_form.pin_code}}
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="inputState" style="font-size:larger">Phone number</label>
+                    {{user_form.phone_number}}
+                </div>
+        </div>
+            <div class="mb-5 mt-4">
+                <button type="submit" class="btn btn-primary ">Update</button>
+            </div>
+    </form>
+</div>
+<!-- <div>
+
+    {% for error in error%}
+    {{error}}
+    {% endfor %}
+
+    {% for error in error2%}
+    {{error}}
+    {% endfor %}
+</div> -->
+</section>
+{% endblock content %}

@@ -28,14 +28,21 @@
     <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/loginstyle.css' %}" type="text/css">
+    <link rel="stylesheet" href="" type="text/css">
+    <script>
+        setTimeout(function(){
+            if ($('#msg').length > 0) {
+                $('#msg').remove();
+            }
+        }, 3000)    // 2000 millisecond
+      </script>
 
     
 </head>
-<body style="background-color: rgb(246, 244, 239);">
+<body style="background-color: rgb(255, 255, 255);">
 
 <!-- navbar content --> {% include 'includes/navbar.html' %}
-
+<!-- {% include 'includes/alerts.html' %} -->
 {% block content %}
 
 <!-- Type contents here -->

@@ -22,7 +22,17 @@
   <!-- ========================= SECTION CONTENT ========================= -->
   <section class="section-conten padding-y" style="min-height:84vh">
 
-    <!-- ============================ COMPONENT LOGIN   ================================= -->
+    <!-- ============================ COMPONENT LOGIN   ================================= -->                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                                        
+                            <div class="alert alert-success alert-dismissiblen ">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>{{message}}</strong> 
+                            </div>
+                        {% endfor %}
+                        </ul>
+                        {% endif %}
       <div class="card mx-auto mt-5" style="max-width: 380px;">
           <div class="card-body">
           <h2 class="card-title mb-4 text-center">Sign in with OTP</h2>
@@ -45,17 +55,7 @@
          <p class="text-center mt-4">Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
          <br><br>
     <!-- ============================ COMPONENT LOGIN  END.// ================================= -->
-                    {% if messages %}
-                    <ul class="messages">
-                    {% for message in messages %}
-                                    
-                        <div class="alert alert-success alert-dismissiblen ">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <strong>{{message}}</strong> 
-                        </div>
-                    {% endfor %}
-                    </ul>
-                    {% endif %}
+
     </section>
     <!-- ========================= SECTION CONTENT END// ========================= -->
   
