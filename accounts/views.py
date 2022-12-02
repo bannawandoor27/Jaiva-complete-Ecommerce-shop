@@ -45,7 +45,6 @@ def register(request):
 
     return render(request, 'Customers/signup.html', context)
 
-
 @never_cache
 def login(request):
     if 'email' in request.session:
@@ -69,7 +68,6 @@ def login(request):
 
     return render(request, 'Customers/login.html')
 
-
 def otpLogin(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -87,7 +85,6 @@ def otpLogin(request):
         return redirect('otpVerification')
 
     return render(request, 'Customers/otpLogin.html')
-
 
 def otpVerification(request):
     if request.user.is_authenticated:
@@ -130,7 +127,6 @@ def otpVerification(request):
     }
     return render(request, 'Customers/otpVerification.html', context)
 
-
 @login_required(login_url='login')
 def logout(request):
     if 'email' in request.session:
@@ -138,7 +134,6 @@ def logout(request):
     auth.logout(request)
     messages.success(request, "You are logged out.")
     return redirect('login')
-
 
 def profile(request):
     useraddress = get_object_or_404(Address, user = request.user)
@@ -166,3 +161,15 @@ def profile(request):
             }
         #  full_name = str(user.first_name) + str(user.last_name)   
     return render(request, 'profile.html', context)
+
+def forgot_password(request):
+    if request.method=='POST':
+        phone_number=request.POST['phone_number']
+        if Account.objects.get(phone_number=phone_number).exists():
+            send_otp(phone_number)
+            return redirect('otpVerification')
+
+        else:
+            messages.error(request,'Account does not exist')
+
+    return render(request,'Customers/forgot_password.html')

@@ -25,7 +25,7 @@
               <div class="card mx-auto mt-5" style="max-width: 380px; background-image: url( '{% static 'img/tomatoes.jpg' %}')  ;">
                   <div class="card-body" style="background-color: rgb(255, 255, 255);">
                   <h2 class="card-title mb-4 text-center">Sign in</h2>
-                  <form action="" method="post">
+                  <form action="{% url 'login' %}" method="post">
                     {% csrf_token %}
                     <div class="form-group">
                       <label>Email</label>
@@ -37,7 +37,7 @@
                       </div> 
                       
                       <div class="form-group">
-                        <a href="#" class="float-right mb-3" >Forgot password?</a> 
+                        <a href="{% url 'forgot_password' %}" class="float-right mb-3" >Forgot password?</a> 
                        
                       </div> 
                       <div class="form-group" >
@@ -56,7 +56,7 @@
                     {% endfor %}
                   </ul>
                   {% endif %}
-                  <p class="text-center"> <a href="{% url 'otpLogin' %}" style="">Click Here for OTP login</a></p>
+                  <p class="text-center"> <a href="{% url 'otpLogin' %}" >Click Here for OTP login</a></p>
                         
                   <p class="text-center"><a href=""></a></p>
                   </div> 
