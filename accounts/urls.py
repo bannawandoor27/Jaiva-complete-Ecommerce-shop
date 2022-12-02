@@ -11,4 +11,7 @@ urlpatterns = [
   path('/profile',views.profile,name='profile'),
   path('/admin',admin.site.urls),
   path('/forgotpassword',views.forgot_password,name='forgot_password'),
+  path('otpforgotpassword',views.otp_forgot_password,name='otpforgotpassword'),
+  path('resetpassword',views.reset_password,name='resetpassword'),
+
 ]

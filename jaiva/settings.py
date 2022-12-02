@@ -157,9 +157,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-AUTH_TOKEN ='201a72051542c974c25a34ef2cb4fca9'
+AUTH_TOKEN ='d57a688fc7e550d63406ed2006a7610e'
 ACCOUNT_SID ='AC16200e195d4917cba56728779aebe4c8'
-SERVICES_ID = 'VAaca2a701f34b9982d2b0075be590e6fc'
+SERVICES_ID = 'MGc725ed34382d0012cc1bf82b2b33ce10'
 
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {

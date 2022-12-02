@@ -165,11 +165,47 @@ def profile(request):
 def forgot_password(request):
     if request.method=='POST':
         phone_number=request.POST['phone_number']
-        if Account.objects.get(phone_number=phone_number).exists():
+        if Account.objects.get(phone_number=phone_number) is not None:
             send_otp(phone_number)
-            return redirect('otpVerification')
+            return redirect('otpforgotpassword')
 
         else:
             messages.error(request,'Account does not exist')
 
     return render(request,'Customers/forgot_password.html')
+
+def otp_forgot_password(request):
+    phone_number = request.session['phone_number']
+    if request.method == 'POST':
+        user = Account.objects.get(phone_number=phone_number)
+        try:
+            check_otp = request.POST.get('otp')
+            if not check_otp:
+                raise e
+        except Exception as e:
+            messages.error(request, 'Please type in your OTP!!!')
+            return redirect('otpforgotpassword')
+
+        check = verify_otp(phone_number, check_otp)
+        if check:
+            messages.success(request,"OTP verified successfully")
+            return redirect('resetpassword')
+
+def reset_password(request):
+    if request.method == 'POST':
+        password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
+        if len(password)<8 or len(confirm_password)<8:
+            messages.error(request,'password must contain atleast 8 characters!')
+            return redirect('resetpassword')
+        elif password!=confirm_password:
+            messages.error(request,'Passwords doesnoty match!')
+            return redirect('resetpassword')
+        else:
+            uid = request.session.get('uid')
+            user = Account.objects.get(pk=uid)
+            user.set_password(password)
+            user.save()
+            messages.success(request,'Password reset successful')
+    return render(request,'Customers/reset_password.html')
+
