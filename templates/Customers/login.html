@@ -20,6 +20,14 @@
             </div>
         </section>
         <!-- Breadcrumb Section End -->
+        {% if request.GET.command == 'verification' %}
+
+<div class="container mx-auto alert alert-info text-center" role="alert" style="max-width: 1024px; margin-top:100px;">
+Thank you for registering with us. We have sent you a verification email to your email address [{{ request.GET.email }}]
+<br><br>
+Already verified? <a href="{% url 'login' %}">Login</a>
+</div>
+      {% else %}
         <section class="section-conten padding-y" style="min-height:84vh; ">
 
               <div class="card mx-auto mt-5" style="max-width: 380px; background-image: url( '{% static 'img/tomatoes.jpg' %}')  ;">
@@ -56,7 +64,7 @@
                     {% endfor %}
                   </ul>
                   {% endif %}
-                  <p class="text-center"> <a href="{% url 'otpLogin' %}" >Click Here for OTP login</a></p>
+                  <p class="text-center"> <a  ></a></p>
                         
                   <p class="text-center"><a href=""></a></p>
                   </div> 
@@ -70,7 +78,7 @@
             
             </section>
         
-
+{% endif%}
 
 {% endblock content %}
     

@@ -159,7 +159,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_TOKEN ='d57a688fc7e550d63406ed2006a7610e'
 ACCOUNT_SID ='AC16200e195d4917cba56728779aebe4c8'
-SERVICES_ID = 'MGc725ed34382d0012cc1bf82b2b33ce10'
+SERVICES_ID = 'MG1bef31e2eeb755f434ea0b553e74f505'
 
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
@@ -168,8 +168,8 @@ MESSAGE_TAGS = {
 }
 
 # SMTP configuration
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'bannawandoor@gmail.com'
+EMAIL_HOST_PASSWORD = 'tzkwaetuuajeyazu'
+EMAIL_USE_TLS = True
