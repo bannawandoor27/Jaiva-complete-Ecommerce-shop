@@ -13,6 +13,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
+from django.contrib.auth import update_session_auth_hash
 # Create your views here.
 
 
@@ -116,7 +117,7 @@ def logout(request):
     messages.success(request, "You are logged out.")
     return redirect('login')
 
-def profile(request):
+def edit_profile(request):
     useraddress = get_object_or_404(Address, user = request.user)
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
@@ -125,7 +126,7 @@ def profile(request):
             user_form.save()
             address_form.save()
             messages.success(request, 'Your profile has been updated!')
-            return redirect('profile')
+            return redirect('edit_profile')
         # else:
         #     context={'error':user_form.errors,
 
@@ -141,7 +142,7 @@ def profile(request):
                 'address_form': address_form
             }
         #  full_name = str(user.first_name) + str(user.last_name)   
-    return render(request, 'profile.html', context)
+    return render(request, 'Customers/edit_profile.html', context)
 
 def forgot_password(request):
     if request.method == 'POST':
@@ -202,10 +203,36 @@ def reset_password(request):
     else:
         return render(request, 'Customers/reset_password.html')
 
+@login_required
+def user_dashboard(request):
+    return render(request,'Customers/dashboard.html')
 
 
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        current_password = request.POST['current_password']
+        new_password = request.POST['new_password']
+        confirm_password = request.POST['confirm_password']
 
+        user = Account.objects.get(phone_number__exact=request.user.phone_number)
 
+        if new_password == confirm_password:
+            success = user.check_password(current_password)
+            if success:
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)
+                # auth.logout(request)
+                messages.success(request, 'Password updated successfully')
+                return redirect('change_password')
+            else:
+                messages.error(request, 'Please enter valid current password')
+                return redirect('change_password')
+        else:
+            messages.error(request, 'Password does not match!')
+            return redirect('change_password')
+    return render(request, 'Customers/change_password.html')
 
 
 

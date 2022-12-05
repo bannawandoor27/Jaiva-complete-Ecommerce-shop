@@ -33,7 +33,7 @@
                             {% if user.is_authenticated %}
                             <div class="header__top__right__auth d-flex justify-content-end" style="margin-right: 2rem;">
                                 <div>
-                                <a href="{% url 'profile' %}" class="mx-2"><i class="fa fa-user "></i> {{user.first_name}}</a><a href=" {% url 'logout' %}"></div>
+                                <a href="{% url 'user_dashboard' %}" class="mx-2"><i class="fa fa-user "></i> {{user.first_name}}</a><a href=" {% url 'logout' %}"></div>
                                 <div>
                                     <i class="fa fa-user"></i> Logout</a>
                                 </div>
