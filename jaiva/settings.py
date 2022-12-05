@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'jaivashop',
-    'department',
     'adminpanel',
+    'category',
+    'blog',
     
 ]
 
