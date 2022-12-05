@@ -31,7 +31,6 @@
               <form method="POST" action="{% url 'signup' %}">
                 {% csrf_token %}
                 <div class="form-outline mb-4">
-
                   {{form.first_name}}
                 </div>
                 <div class="form-outline mb-4">
@@ -53,21 +52,41 @@
                   <button type="submit" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"> <a href=""
                       style="color: white;">Register</a> </button>
                 </div>
-                {{form.email.errors}}
-                {{form.phone_number.errors}}
-                {{form.non_field_errors}}
+                <div class="mt-3">
 
+                </div>
+                <div class="error messages mx-4" style="color: red;">
+                    {{form.email.errors}}
+                    {{form.first_name.errors}}
+                    {{form.phone_number.errors}}
+                    {{form.non_field_errors}}
+                </div>
+
+
+                <!-- <div class="error messages" id="msg">
+                  {% for field in form %}
+                   
+                      {% for error in field.errors %}
+                        <small style="color: red">{{ error }}</small> <br>
+                      {% endfor %}
+                  {% endfor %} -->
+
+                
+ 
                 {% if messages %}
-                <ul class="messages">
+                <div id="msg" >
+                <ul class="messages" >
                   {% for message in messages %}
                                   
-                    <div class="alert alert-success alert-dismissiblen ">
+                    <div class="alert alert-success alert-dismissiblen " >
                       <button type="button" class="close" data-dismiss="alert">&times;</button>
-                      <strong>{{message}}</strong> 
+                      <strong >{{message}}</strong> 
                     </div>
                   {% endfor %}
                 </ul>
-                {% endif %}
+              </div>
+              </div>
+                {% endif %} 
                 <!-- {% comment %} <div class="alert alert-warning alert-dismissible fade show" role="alert">
                   <strong>Holy guacamole!</strong> You should check in on some of those fields below.
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">

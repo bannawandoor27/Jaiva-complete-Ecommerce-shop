@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'accounts',
     'jaivashop',
     'department',
-    'phone_verify'
+    'adminpanel',
+    
 ]
 
 MIDDLEWARE = [
@@ -81,12 +82,23 @@ AUTH_USER_MODEL= 'accounts.Account'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'jaiva', 
+        'USER': 'postgres',
+        'PASSWORD': 'banna',
+        'HOST': '127.0.0.1', 
+        'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -144,3 +156,20 @@ MEDIA_ROOT = BASE_DIR/'media'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+
+AUTH_TOKEN ='d57a688fc7e550d63406ed2006a7610e'
+ACCOUNT_SID ='AC16200e195d4917cba56728779aebe4c8'
+SERVICES_ID = 'MG1bef31e2eeb755f434ea0b553e74f505'
+
+from django.contrib.messages import constants as messages
+MESSAGE_TAGS = {
+    messages.INFO: '',
+    50: 'critical',
+}
+
+# SMTP configuration
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'bannawandoor@gmail.com'
+EMAIL_HOST_PASSWORD = 'tzkwaetuuajeyazu'
+EMAIL_USE_TLS = True

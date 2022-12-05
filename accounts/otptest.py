@@ -3,6 +3,7 @@ from twilio.rest import Client
 
 
 
+
 def send_otp(mobile):
     number= '+91'+str(mobile)
     account_sid = settings.ACCOUNT_SID
@@ -30,7 +31,6 @@ def verify_otp(mobile,otp):
                            .create(to=number, code=otp)
 
     if verification_check.status=='approved':
-        print('verification confirm')
         return True
     else:
         return False
