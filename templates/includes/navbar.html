@@ -1,4 +1,21 @@
    {% load static %}
+   <style>
+    .category__discount__percent {
+        height: 50px;
+        width: 50px;
+        background: #fd0000;
+        border-radius: 50%;
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+        line-height: 48px;
+        text-align: center;
+        position: absolute;
+        left: 7px;
+        top: 13px;
+        border-color: rgb(0, 0, 0);
+    }
+    </style>
    <!-- Header Section Begin -->
     <header class="header">
         <div class="header__top">
@@ -31,7 +48,8 @@
                             </div>
 
                             {% if user.is_authenticated %}
-                            <div class="header__top__right__auth d-flex justify-content-end" style="margin-right: 2rem;">
+                            <div class="header__top__right__auth d-flex justify-content-end" style="    margin-right: 1rem;
+                            margin-top: 17px; ">
                                 <div>
                                 <a href="{% url 'user_dashboard' %}" class="mx-2"><i class="fa fa-user "></i> {{user.first_name}}</a><a href=" {% url 'logout' %}"></div>
                                 <div>
@@ -96,4 +114,6 @@
         </div>
 
     </header>
+    
+    
     <!-- Header Section End -->
