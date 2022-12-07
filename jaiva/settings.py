@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'jaivashop',
-    'department',
     'adminpanel',
+    'category',
+    'blog',
     
 ]
 
@@ -69,6 +70,15 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'category.context_processors.category_links',
+                'category.context_processors.sub_category_links',
+                'jaivashop.context_processors.latest_products1',
+                'jaivashop.context_processors.latest_products2',
+                'jaivashop.context_processors.home_made1',
+                'jaivashop.context_processors.home_made2',
+                'jaivashop.context_processors.today_special1',
+                'jaivashop.context_processors.today_special2',
+                'blog.context_processors.blog_data',
             ],
         },
     },
