@@ -198,7 +198,8 @@
                                 </ul>
                             </div>
                             <div class="featured__item__text">
-                                <h6><a href="{{product.get_url}}">{{product.product_name}}</a></h6>
+                                <h5><a href="{{product.get_url}}">{{product.product_name}}</a></h5>
+                                <h6>{{product.category|capfirst}}</h6>
                                 {% if product.offer_price != product.price %}
                                 <h5><del class="text-secondary">₹{{product.price}}</del> ₹{{product.offer_price}}/<span class='text-secondary'> {{product.unit}}</span></h5>
                                 {% else %}

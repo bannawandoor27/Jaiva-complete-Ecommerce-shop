@@ -15,7 +15,7 @@ def home(request):
   
   return render(request, 'home.html', context)
 def shop(request):
-    return render(request,'shop')
+    return render(request,'jaivashop/shop.html')
 
 def product_details(request):
     pass
