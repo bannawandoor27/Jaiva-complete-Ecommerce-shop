@@ -22,5 +22,6 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', include('adminpanel.urls')),
     path('',include('jaivashop.urls')),
-    path('customers',include('accounts.urls'))
+    path('customers/',include('accounts.urls')),
+    path('cart/',include('carts.urls'))
 ]+ static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

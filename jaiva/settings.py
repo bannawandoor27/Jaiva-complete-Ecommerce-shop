@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'adminpanel',
     'category',
     'blog',
-    
+    'bootstrap4',
+    'carts',
 ]
 
 MIDDLEWARE = [

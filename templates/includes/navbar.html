@@ -1,119 +1,141 @@
-   {% load static %}
-   <style>
-    .category__discount__percent {
-        height: 50px;
-        width: 50px;
-        background: #fd0000;
-        border-radius: 50%;
-        font-size: 18px;
-        font-weight: 600;
-        color: #ffffff;
-        line-height: 48px;
-        text-align: center;
-        position: absolute;
-        left: 7px;
-        top: 13px;
-        border-color: rgb(0, 0, 0);
-    }
-    </style>
-   <!-- Header Section Begin -->
-    <header class="header">
-        <div class="header__top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__left">
-                            <ul>
-                                <li><i class="fa fa-envelope"></i> getjaiva@gmail.com</li>
-                                <li>Free Shipping for all Order of ₹250</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6">
-                        <div class="header__top__right">
-                            <div class="header__top__right__social">
-                                <a href="#"><i class="fa fa-facebook"></i></a>
-                                <a href="#"><i class="fa fa-twitter"></i></a>
-                                <a href="#"><i class="fa fa-linkedin"></i></a>
-                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
-                            </div>
-                            <div class="header__top__right__language">
-                                <img src="{% static 'img/language.png' %}" alt="">
-                                <div>Language</div>
-                                <span class="arrow_carrot-down"></span>
-                                <ul>
-                                    <li><a href="#">Malayalam</a></li>
-                                    <li><a href="#">English</a></li>
-                                </ul>
-                            </div>
+{% load static %}
+<!-- Header Section Begin -->
+ <header class="header">
+    <div>
+     <div class="header__top">
+         <div class="container">
+             <div class="row">
+                 <div class="col-lg-6 col-md-6">
+                     <div class="header__top__left">
+                         <ul>
+                             <li><i class="fa fa-envelope"></i> getjaiva@gmail.com</li>
+                             <li>Free Shipping for all Order of ₹250</li>
+                         </ul>
+                     </div>
+                 </div>
+                 <div class="col-lg-6 col-md-6">
+                     <div class="header__top__right">
+                        <div id='google_translate_element' class="header__top__right__social "></div> 
+                         <div class="header__top__right__social">
+                           
+                             <a href="#"><i class="fa fa-facebook"></i></a>
+                             <a href="#"><i class="fa fa-twitter"></i></a>
+                             <a href="#"><i class="fa fa-linkedin"></i></a>
+                             <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                         </div>
+                        
+                         {% if user.is_authenticated %}
+                         <div class="header__top__right__auth d-flex justify-content-end" style="    margin-right: 1rem;
+                         margin-top: 17px; ">
+                             <div>
+                             <a href="{% url 'user_dashboard' %}" class="mx-2"><i class="fa fa-user "></i> <strong> {{user.first_name}}</strong></a><a href=" {% url 'logout' %}"></div>
+                             <div>
+                                 <i class="fa fa-sign-out"></i> Logout</a>
+                             </div>
 
-                            {% if user.is_authenticated %}
-                            <div class="header__top__right__auth d-flex justify-content-end" style="    margin-right: 1rem;
-                            margin-top: 17px; ">
-                                <div>
-                                <a href="{% url 'user_dashboard' %}" class="mx-2"><i class="fa fa-user "></i> {{user.first_name}}</a><a href=" {% url 'logout' %}"></div>
-                                <div>
-                                    <i class="fa fa-user"></i> Logout</a>
-                                </div>
+                         </div>
 
-                            </div>
+                         {% else %}
+                         <div class="header__top__right__auth d-flex justify-content-end" style="margin-right: 2rem;">
+                             <div>
+                             <a href="{% url 'login' %}" class="mx-2"><i class="fa fa-user "></i> Login</a><a href="{% url 'signup' %}"></div>
+                             <div>
+                                 <i class="fa fa-user"></i> Signup</a>
+                             </div>
+                         {% endif %}
 
-                            {% else %}
-                            <div class="header__top__right__auth d-flex justify-content-end" style="margin-right: 2rem;">
-                                <div>
-                                <a href="{% url 'login' %}" class="mx-2"><i class="fa fa-user "></i> Login</a><a href="{% url 'signup' %}"></div>
-                                <div>
-                                    <i class="fa fa-user"></i> Signup</a>
-                                </div>
-                            {% endif %}
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+     </div>
+     <div class="container">
+         <div class="row">
+             <div class="col-lg-3">
+                 <div class="header__logo">
+                     <a href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                 </div>
+             </div>
+             <div class="col-lg-6">
+                 <nav class="header__menu">
+                     <ul>
+                         <li class="active"><a href="{% url 'home' %}">Home</a></li>
+                         <li><a href="{% url 'shop' %}" >Shop</a></li>
+                         <li><a href="#">Pages</a>
+                             <ul class="header__menu__dropdown">
+                                 <li><a href="./shop-details.html">Shop Details</a></li>
+                                 <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                                 <li><a href="./checkout.html">Check Out</a></li>
+                                 <li><a href="./blog-details.html">Blog Details</a></li>
+                             </ul>
+                         </li>
+                         <li><a href="./blog.html">Blog</a></li>
+                         <li><a href="./contact.html">Contact</a></li>
+                     </ul>
+                 </nav>
+             </div>
+             <div class="col-lg-3">
+                 <div class="header__cart">
+                     <ul>
+                         <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                         <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                     </ul>
+                     <div class="header__cart__price">item: <span>$150.00</span></div>
+                 </div>
+             </div>
+         </div>
+         <div class="humberger__open">
+             <i class="fa fa-bars"></i>
+         </div>
+     </div>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+ </header>
+       <!-- Hero Section Begin -->
+       <section class="hero hero-normal">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
-                    <div class="header__logo">
-                        <a href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt=""></a>
+                    <div class="hero__categories">
+                        <div class="hero__categories__all">
+                            <i class="fa fa-bars"></i>
+                            <span>All categories</span>
+                        </div>
+                        <ul class="overflow-auto" style="max-height: 29rem;">
+                            <li><a class="text-dark f-5" href="{% url 'shop' %}">
+                                All Products
+                            </a></li>
+                          {% for category in cat_links %}
+                          <li><a class="text-dark f-5" href="{{category.get_url}}">
+                              {{category.category_name|capfirst}}
+                          </a></li>
+  
+                        {% endfor %} 
+                      </ul>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <nav class="header__menu">
-                        <ul>
-                            <li class="active"><a href="{% url 'home' %}">Home</a></li>
-                            <li><a href="{% url 'shop' %}" >Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="header__menu__dropdown">
-                                    <li><a href="./shop-details.html">Shop Details</a></li>
-                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                                    <li><a href="./checkout.html">Check Out</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3">
-                    <div class="header__cart">
-                        <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
-                        </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
+                <div class="col-lg-9">
+                    <div class="hero__search">
+                        <div class="hero__search__form">
+                            <form action="{% url 'search' %}" method="GET">
+                                <input type="text" placeholder="What do yo u need?" name="keyword" required>
+                                <button type="submit" class="site-btn">SEARCH</button>
+                            </form>
+                        </div>
+                        <div class="hero__search__phone">
+                            <div class="hero__search__phone__icon">
+                                <i class="fa fa-phone"></i>
+                            </div>
+                            <div class="hero__search__phone__text">
+                                <h5>+917034725940</h5>
+                                <span>support 24/7 time</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="humberger__open">
-                <i class="fa fa-bars"></i>
             </div>
         </div>
-
-    </header>
-    
-    
-    <!-- Header Section End -->
+    </section>
+    <!-- Hero Section End -->
+ <!-- Header Section End -->
