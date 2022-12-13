@@ -10,6 +10,7 @@ def home(request):
   featured_categories = Sub_Category.objects.all().filter(is_featured=True)[:5]
   featured_products = Product.objects.all().filter(is_featured=True)[:8]
   all_categories = Category.objects.all()
+
   
   context = {
     'featured_categories': featured_categories,

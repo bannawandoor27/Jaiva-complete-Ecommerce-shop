@@ -1,6 +1,6 @@
 from django.db import models
 from accounts.models import Account
-from jaivashop.models import Product
+from jaivashop.models import Product,Variation
 
 # Create your models here.
 
@@ -16,6 +16,7 @@ class CartItem(models.Model):
   user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
   product = models.ForeignKey(Product, on_delete=models.CASCADE)
   cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True)
+  variations = models.ManyToManyField(Variation, blank=True)
   quantity = models.IntegerField()
   price = models.IntegerField(default=1)
   is_active = models.BooleanField(default=True)

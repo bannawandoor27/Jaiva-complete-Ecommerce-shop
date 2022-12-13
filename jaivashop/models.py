@@ -44,3 +44,26 @@ class Product(models.Model):
         return int(product_offer)
     else:
         return category_offer
+
+
+
+class VariationManager(models.Manager):
+  def weights(self):
+    return super(VariationManager, self).filter(variation_category='weight', is_active=True)
+  
+variation_category_choice =  (
+    ('weight','weight'),
+)
+
+class Variation(models.Model):
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  variation_category = models.CharField(max_length=100, choices=variation_category_choice)
+  variation_value = models.CharField(max_length=100)
+  price_multiplier = models.IntegerField(default=1)
+  is_active = models.BooleanField(default=True)
+  created_date = models.DateTimeField(auto_now=True)
+  
+  objects = VariationManager()
+  
+  def __str__(self):
+    return self.variation_value
