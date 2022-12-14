@@ -2,7 +2,27 @@
 {% load static %}
 
 {% block content %}
-
+    <!-- Breadcrumb Section Begin -->
+<div class="">
+    <section class="breadcrumb-section pb-5 ">
+        <div class="container-fluid  w-100  p-4 mt-0  "
+            style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
+            <div class="row ">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Checkout</h2>
+                        <div class="breadcrumb__option">
+                            <a href="{% url 'home' %}">Home</a>
+                            <a href="{% url 'cart' %}">Cart</a>
+                            <span>Checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Breadcrumb Section End -->
 
     
 {% endblock content %}

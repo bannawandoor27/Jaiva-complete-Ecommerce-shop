@@ -4,6 +4,7 @@ from .models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
 
+
 # Create your views here.
 from django.http import HttpResponse
 
@@ -173,7 +174,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
             if cart_item.product.product_offer != 0 :
-                price = cart_item.product.price-(cart_item.product.product_offer * cart_item.product.price/100)
+                price = cart_item.product.offer_price()
             else:
                 price = cart_item.product.price
             total += (price* cart_item.quantity)
@@ -190,8 +191,15 @@ def cart(request, total=0, quantity=0, cart_items=None):
         'tax'       : tax,
         'grand_total': grand_total,
     }
-    
+
     total_amnt = total
 
     return render(request, 'jaivashop/cart.html', context)
+
+
+
+
+@login_required(login_url = 'login')
+def checkout(request, total=0, quantity=0, cart_items=None):
+  return render(request, 'jaivashop/checkout.html')
 
