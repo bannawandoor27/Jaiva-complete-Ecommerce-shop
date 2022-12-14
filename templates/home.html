@@ -81,9 +81,9 @@
                         <div class="featured__item" style="border-radius: 50px;">
                             <div class="featured__item__pic set-bg" data-setbg="{{product.image_1.url}}" style="border-radius: 144px;">
                                 <ul class="featured__item__pic__hover">
-                                     <li><a href="{% url 'add_wishlist' product.id %}"><i class="fa fa-heart"></i></a></li>
-                                    <li><a href="#"><i class="fa fa-paper-plane"></i></a></li> 
-                                    <li><a href="{{product.get_url}}"><i class="fa fa-cart-arrow-down"></i></a></li>
+                                <li ><a href="{% url 'add_wishlist' product.id %}" data-toggle="tooltip" data-placement="bottom" title="Add to wishlist"><i class="fa fa-heart "   ></i></a></li>
+                                <li><a href="{{product.get_url}}" data-toggle="tooltip" data-placement="bottom" title="View deatils"><i class="fa fa-paper-plane"></i></a></li> 
+                                <li><a href="{% url 'add_cart' product.id %}" data-toggle="tooltip" data-placement="bottom" title="Add to cart"><i class="fa fa-cart-arrow-down"></i></a></li>
                                 </ul>
                             </div>
                             <div class="featured__item__text">

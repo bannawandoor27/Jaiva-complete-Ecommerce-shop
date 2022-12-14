@@ -1,4 +1,6 @@
 from .models import Product
+from .models import Wishlist,WishlistItem
+from .views import _wishlist_id
 
 def latest_products1(request):
   latest_products_1 = Product.objects.all().order_by('-created_date')[:3]
@@ -23,3 +25,20 @@ def today_special1(request):
 def today_special2(request):
   today_special = Product.objects.all().order_by('stock')[:3]
   return dict(today_specia21=today_special)
+
+def wishlist_counter(request):
+    wishlist_count = 0
+    if 'admin' in request.path:
+        return {}
+    else:
+        try:
+            wishlist = Wishlist.objects.filter(wishlist_id=_wishlist_id(request))
+            if request.user.is_authenticated:
+                wishlist_items = WishlistItem.objects.all().filter(user=request.user)
+            else:
+                wishlist_items = WishlistItem.objects.all().filter(wishlist=wishlist[:1])
+            for wishlist_item in wishlist_items:
+                wishlist_count += 1
+        except Wishlist.DoesNotExist:
+            wishlist_count = 0
+    return dict(wishlist_count=wishlist_count)

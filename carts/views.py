@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.http import HttpResponse
 
+total_amnt=0
 def _cart_id(request):
     cart = request.session.session_key
     if not cart:
@@ -161,6 +162,7 @@ def remove_cart_item(request, product_id, cart_item_id):
 
 
 def cart(request, total=0, quantity=0, cart_items=None):
+    global total_amnt
     try:
         tax = 0
         grand_total = 0
@@ -180,7 +182,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
         grand_total =round(total + tax,2)
     except ObjectDoesNotExist:
         pass #just ignore
-
+        
     context = {
         'total': total,
         'quantity': quantity,
@@ -188,5 +190,8 @@ def cart(request, total=0, quantity=0, cart_items=None):
         'tax'       : tax,
         'grand_total': grand_total,
     }
+    
+    total_amnt = total
+
     return render(request, 'jaivashop/cart.html', context)
 

@@ -47,9 +47,13 @@ hiii
                             <tr>
                                 <th class="shoping__product">Products</th>
                                 <th>Price</th>
-                                <th>Offer Price</th>
-                                <th>Add to Cart</th>
+                                <th >Offer Price</th>
                                 <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Add to Cart</th>
+                                <th >Remove</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -57,22 +61,27 @@ hiii
                           {% for item in items %}
 
                           <tr>
-                            <td class="shoping__cart__item">
+                            <td class="shoping__cart__item ">
                                 <img src="{{item.product.image_1.url}}" alt="" style="height: 6rem;width: 6rem;">
-                                <a href="{{item.product.get_url}}"><h5>{{item.product.product_name}}</h5></a>
+                                <a href="{{item.product.get_url}}"><h5>{{item.product.product_name}} <br> <small>1 {{item.product.unit}}</small>
+                                </h5></a>
                                 
                             </td>
-                            <td class="shoping__cart__price">
+                            <td class="shoping__cart__price mx-4">
                                 ₹{{item.product.price}}
                             </td>
-                            <td class="shoping__cart__price">
+                            <td class="shoping__cart__price " >
                                 ₹{{item.product.offer_price|floatformat:"0"}}
                             </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td class="shoping__cart__price">
                                 <a href="{% url 'add_cart' item.product.id %}" type="button" class="btn btn-primary"> Add to Cart</a>
                             </td>
                             <td>
-                                <a href="{% url 'remove_wishlist_item' item.product.id item.id %}">-</a>
+                                <a data-toggle="modal" data-target="#Modal{{forloop.counter}}" class="fa fa-minus-circle" style="color: red;"></a>
                             </td>
                         </tr>
 
@@ -86,11 +95,11 @@ hiii
                                           </button>
                                           </div>
                                           <div class="modal-body text-left">
-                                              Are you sure to remove <b>{{cart_item.product.product_name}}</b> from cart?
+                                              Are you sure to remove <b>{{item.product.product_name}}</b> from wishlist?
                                           </div>
                                           <div class="modal-footer">
                                           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                          <a href="" type="button" class="btn btn-danger">Yes</a>
+                                          <a href="{% url 'remove_wishlist_item' item.product.id item.id %}" type="button" class="btn btn-danger">Yes</a>
                                           </div>
                                       </div>
                                       </div>

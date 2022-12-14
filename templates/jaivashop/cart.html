@@ -58,7 +58,8 @@
                           <tr>
                             <td class="shoping__cart__item">
                                 <img src="{{cart_item.product.image_1.url}}" alt="" style="height: 6rem;width: 6rem;">
-                                <a href="{{cart_item.product.get_url}}"><h5>{{cart_item.product.product_name}}</h5></a>
+                                <a href="{{cart_item.product.get_url}}"><h5>{{cart_item.product.product_name}} <br>  <small style="text-secondary">1 {{cart_item.product.unit}}</small> </h5></a>
+                               
                                 <p class="text_muted">
                                     {% if cart_item.variations.all %}
                                         {% for item in cart_item.variations.all %}
@@ -74,11 +75,11 @@
                             
                             <td class="shoping__cart__quantity ">
                                 <div class="quantity d-flex " style="margin-left: 3rem;">
-                                    <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light" type="button" id="button-plus">-</i> </a>
+                                    <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light" type="button" id="button-minus">-</i> </a>
                                     <div>
                                     <input type="text" value="{{cart_item.quantity}}" class="form-control input-sm text-center" readonly style="width: 3rem;">
                                     </div>
-                                    <a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light" type="button" id="button-minus">+</a>
+                                    <a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light" type="button" id="button-plus">+</a>
                                 </div>
                             </td>
                             <td class="shoping__cart__total"  id="total{{forloop.counter}}"> ₹{{cart_item.sub_total}} </td>
