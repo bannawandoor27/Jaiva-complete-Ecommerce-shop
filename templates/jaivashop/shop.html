@@ -139,7 +139,7 @@
                                           data-setbg="{{product.image_1.url}}" >
                                           <div class="product__discount__percent">-{{product.product_offer}}%</div>
                                           <ul class="product__item__pic__hover">
-                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                            <li><a href="{% url 'add_wishlist' product.id %}"><i class="fa fa-heart"></i></a></li>
                                             <li><a href="#"><i class="fa fa-paper-plane"></i></a></li> 
                                             <li><a href="{{product.get_url}}"><i class="fa fa-cart-arrow-down"></i></a></li>
                                           </ul>

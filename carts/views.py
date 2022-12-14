@@ -102,7 +102,6 @@ def add_cart(request, product_id):
                 ex_var_list.append(list(existing_variation))
                 id.append(item.id)
 
-            print(ex_var_list)
 
             if product_variation in ex_var_list:
                 # increase the cart item quantity
@@ -171,10 +170,14 @@ def cart(request, total=0, quantity=0, cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            total += (cart_item.product.price * cart_item.quantity)
+            if cart_item.product.product_offer != 0 :
+                price = cart_item.product.price-(cart_item.product.product_offer * cart_item.product.price/100)
+            else:
+                price = cart_item.product.price
+            total += (price* cart_item.quantity)
             quantity += cart_item.quantity
-        tax = (2 * total)/100
-        grand_total = total + tax
+        tax = round((2 * total)/100,2)
+        grand_total =round(total + tax,2)
     except ObjectDoesNotExist:
         pass #just ignore
 

@@ -80,8 +80,7 @@ TEMPLATES = [
                 'jaivashop.context_processors.today_special1',
                 'jaivashop.context_processors.today_special2',
                 'blog.context_processors.blog_data',
-                'carts.context_processors.counter',
-                'carts.context_processors.total',
+                'carts.context_processors.counter'
             ],
         },
     },
