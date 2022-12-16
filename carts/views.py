@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from accounts.models import Account, Address
 from jaivashop.models import Product, Variation
+from orders.models import Coupon, UserCoupon
 from .models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.decorators import login_required
@@ -8,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.http import HttpResponse
 
-total_amnt=0
+
 def _cart_id(request):
     cart = request.session.session_key
     if not cart:
@@ -173,7 +175,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
             cart = Cart.objects.get(cart_id=_cart_id(request))
             cart_items = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
-            if cart_item.product.product_offer != 0 :
+            if cart_item.product.offer_price() :
                 price = cart_item.product.offer_price()
             else:
                 price = cart_item.product.price
@@ -201,5 +203,51 @@ def cart(request, total=0, quantity=0, cart_items=None):
 
 @login_required(login_url = 'login')
 def checkout(request, total=0, quantity=0, cart_items=None):
-  return render(request, 'jaivashop/checkout.html')
+  tax=0
+  grand_total=0
+  user=Account.objects.filter(id= request.user.id)
+  print(user)
+  address = Address.objects.filter(user = request.user)
+  
+  try:
+    if request.user.is_authenticated:
+      cart_items = CartItem.objects.filter(user = request.user, is_active=True)
+    else:
+      cart = Cart.objects.get(cart_id=_cart_id(request))
+      cart_items = CartItem.objects.filter(cart=cart, is_active=True)
 
+    for cart_item in cart_items:
+      total += int(cart_item.price)*int(cart_item.quantity)
+      quantity += cart_item.quantity
+    tax = (5 * total)/100
+    grand_total = total + tax
+    grand_total = format(grand_total, '.2f')
+  except ObjectDoesNotExist:
+    pass
+  
+  coupons = Coupon.objects.filter(active = True)
+
+  for item in coupons:
+    try:
+        coupon = UserCoupon.objects.get(user = request.user,coupon = item)
+    except:
+        coupon = UserCoupon()
+        coupon.user = request.user
+        coupon.coupon = item
+        coupon.save() 
+
+
+  coupons = UserCoupon.objects.filter(user = request.user, used=False)
+ 
+  
+  context = {
+    'user':user,
+    'address':address,
+    'total':total,
+    'quantity':quantity,
+    'cart_items':cart_items,
+    'tax':tax,
+    'grand_total':grand_total,
+    'coupons':coupons,
+  }
+  return render(request, 'jaivashop/checkout.html', context)

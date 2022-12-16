@@ -1,6 +1,6 @@
 from .models import Cart, CartItem
 from .views import _cart_id
-from .views import total_amnt
+
 
 
 def counter(request):
@@ -20,5 +20,4 @@ def counter(request):
             cart_count = 0
     return dict(cart_count=cart_count)
 
-def total_amount(request):
-    return dict(total_amount=total_amnt)
+

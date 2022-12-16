@@ -60,9 +60,12 @@ class Account(AbstractBaseUser):
 
     def has_module_perms(self,add_labal):
         return True
+    
+    def full_name(self):
+        return(str(self.first_name+self.last_name))
 
 class Address(models.Model):
-    user=models.OneToOneField(Account,on_delete=models.CASCADE)
+    user=models.ForeignKey(Account,on_delete=models.CASCADE)
     address_line_1=models.CharField(max_length=100)
     address_line_2=models.CharField(max_length=100,blank=True)
     city=models.CharField(max_length=20)
@@ -70,6 +73,7 @@ class Address(models.Model):
     state=models.CharField(max_length=20)
     country=models.CharField(max_length=20)
     pin_code=models.CharField(max_length=20)
+    primary_address=models.BooleanField(default=True)
 
 
     def __str__(self):

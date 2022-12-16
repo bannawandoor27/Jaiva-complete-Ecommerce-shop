@@ -165,7 +165,7 @@ def logout(request):
     return redirect('login')
 
 def edit_profile(request):
-    useraddress = get_object_or_404(Address, user = request.user)
+    useraddress = Address.objects.all().filter(user=request.user).first()
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         address_form = UserAddressForm(request.POST, instance=useraddress)
@@ -231,6 +231,38 @@ def resetpassword_validate(request, uidb64, token):
     else:
         messages.error(request, 'This link has been expired!')
         return redirect('login')
+
+
+
+
+
+@login_required(login_url='userLogin')
+def add_address(request):
+    if request.method == 'POST':
+        form = UserAddressForm(request.POST,request.FILES,)
+        if form.is_valid():
+            print('form is valid')
+            address = Address()
+            address.user = request.user
+            address.address_line_1 =  form.cleaned_data['address_line_1']
+            address.address_line_2  = form.cleaned_data['address_line_2']
+            address.district =  form.cleaned_data['district']
+            address.state =  form.cleaned_data['state']
+            address.city =  form.cleaned_data['city']
+            address.country = form.cleaned_data['country']
+            address.pin_code =  form.cleaned_data['pin_code']
+            address.save()
+            messages.success(request,'Address added Successfully')
+            return redirect('edit_profile')
+        else:
+            messages.success(request,'Form is Not valid')
+            return redirect('add_address')
+    else:
+        form = UserAddressForm()
+        context={
+            'form':form
+        }    
+    return render(request,'Customers/add_address.html',context)
 
 def reset_password(request):
     if request.method == 'POST':
