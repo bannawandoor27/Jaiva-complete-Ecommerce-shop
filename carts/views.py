@@ -165,7 +165,6 @@ def remove_cart_item(request, product_id, cart_item_id):
 
 
 def cart(request, total=0, quantity=0, cart_items=None):
-    global total_amnt
     try:
         tax = 0
         grand_total = 0
@@ -206,25 +205,27 @@ def checkout(request, total=0, quantity=0, cart_items=None):
   tax=0
   grand_total=0
   user=Account.objects.filter(id= request.user.id)
-  print(user)
   address = Address.objects.filter(user = request.user)
   
   try:
-    if request.user.is_authenticated:
-      cart_items = CartItem.objects.filter(user = request.user, is_active=True)
-    else:
-      cart = Cart.objects.get(cart_id=_cart_id(request))
-      cart_items = CartItem.objects.filter(cart=cart, is_active=True)
-
-    for cart_item in cart_items:
-      total += int(cart_item.price)*int(cart_item.quantity)
-      quantity += cart_item.quantity
-    tax = (5 * total)/100
-    grand_total = total + tax
-    grand_total = format(grand_total, '.2f')
+            tax = 0
+            grand_total = 0
+            if request.user.is_authenticated:
+                cart_items = CartItem.objects.filter(user=request.user, is_active=True)
+            else:
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                cart_items = CartItem.objects.filter(cart=cart, is_active=True)
+            for cart_item in cart_items:
+                if cart_item.product.offer_price() :
+                    price = cart_item.product.offer_price()
+                else:
+                    price = cart_item.product.price
+                total += (price* cart_item.quantity)
+                quantity += cart_item.quantity
+            tax = round((2 * total)/100,2)
+            grand_total =round(total + tax,2)
   except ObjectDoesNotExist:
-    pass
-  
+            pass #just ignore
   coupons = Coupon.objects.filter(active = True)
 
   for item in coupons:
