@@ -188,3 +188,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'bannawandoor@gmail.com'
 EMAIL_HOST_PASSWORD = 'tzkwaetuuajeyazu'
 EMAIL_USE_TLS = True
+
+# RZORPAY configuration
+RAZOR_KEY_ID = 'rzp_test_yEhRN8OmXfdruZ'
+RAZOR_KEY_SECRET = 'AMT1S7fGJUlWEy5M9KLyWwsz'
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'

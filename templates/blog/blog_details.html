@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section "   >
+    <div class="container-fluid  w-100  p-4 mt-0  " style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>{{blog.heading}}</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home' %}">Home</a>
+                        <span>Blog Details</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+{% comment %}
+    
+    <!-- Blog Details Hero Begin -->
+    <section class="blog-details-hero set-bg" data-setbg="img/blog/details/details-hero.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="blog__details__hero__text">
+                        <h2></h2>
+                        <ul>
+                            <li>By Michael Scofield</li>
+                            <li>January 14, 2019</li>
+                            <li>8 Comments</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details Hero End -->
+    {% endcomment %}
+    <!-- Blog Details Section Begin -->
+    <section class="blog-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-5 order-md-1 order-2">
+                    <div class="blog__sidebar">
+                        <div class="blog__sidebar__item">
+                            <h4>Recent News</h4>
+                            
+                            
+                                
+                            
+                                
+                            <div class="blog__sidebar__recent">
+                                {% for blog in recent_blogs   %}
+                                <a href="{% url 'blog_details' blog.id %}" class="blog__sidebar__recent__item">
+                                    <div class="blog__sidebar__recent__item__pic">
+                                        <img src="{{blog.image.url}}" alt="" style="height: 3rem; width: 3rem;">
+                                    </div>
+                                    <div class="blog__sidebar__recent__item__text">
+                                        <h6>{{blog.heading}}</h6>
+                                        <span>{{blog.modified_date}}</span>
+                                    </div>
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="blog__sidebar__item">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-7 order-md-1 order-1">
+                    <div class="blog__details__text">
+                
+                        <img src="{{blog.image.url}}" alt="">
+                        <p>{{blog.description}}</p>
+                        <h3>{{blog.heading}}</h3>
+                        <p>{{blog.description}}</p>
+                    </div>
+                    <div class="blog__details__content">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="blog__details__author">
+                                    <div class="blog__details__author__pic">
+                                        <img src="https://media.licdn.com/dms/image/C5603AQGllDU4QW0cFw/profile-displayphoto-shrink_800_800/0/1661602049168?e=1677110400&v=beta&t=WkmRKYPrdrnEHSehT32F4ZW9G2RzIs_VOSi60Nslrwg" alt="">
+                                    </div>
+                                    <div class="blog__details__author__text">
+                                        <h6>Hasanul Banna</h6>
+                                        <span>Admin</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="blog__details__widget">
+                                    <ul>
+                                        <li><span>Categories:</span> {{blog.category}}</li>
+                                        <li><span>Tags:</span> All, Trending, Cooking, Healthy Food, Life Style</li>
+                                    </ul>
+                                    <div class="blog__details__social">
+                                        <a href="#"><i class="fa fa-facebook"></i></a>
+                                        <a href="#"><i class="fa fa-twitter"></i></a>
+                                        <a href="#"><i class="fa fa-google-plus"></i></a>
+                                        <a href="#"><i class="fa fa-linkedin"></i></a>
+                                        <a href="#"><i class="fa fa-envelope"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Details Section End -->
+
+    <!-- Related Blog Section Begin -->
+    <section class="related-blog spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title related-blog-title">
+                        <h2>Post You May Like</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for blog in recent_blogs   %}  
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="blog__item">
+                        <div class="blog__item__pic">
+                            <img src="{{blog.image.url}}" alt="" style="height: 15rem;">
+                        </div>
+                        <div class="blog__item__text">
+                            <ul>
+                                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
+                                <li><i class="fa fa-comment-o"></i> 5</li>
+                            </ul>
+                            <h5><a href="#">Cooking tips make cooking simple</a></h5>
+                            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- Related Blog Section End -->
+    {% endblock content %}

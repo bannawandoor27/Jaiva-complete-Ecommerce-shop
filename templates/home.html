@@ -3,8 +3,6 @@
 {% load static %}
 
 
-{% block title %} Home {% endblock title%}
-
 {% block content%}
 
     <!-- Banner Section Begin -->
@@ -303,8 +301,8 @@
                                 <li><i class="fa fa-calendar-o"></i> {{ blog.modified_date }} </li>
                                 <li><i class="fa fa-comment-o"></i> 5</li>
                             </ul>
-                            <h5><a href="#">{{ blog.heading|truncatechars:100 }}</a></h5>
-                            <p>{{blog.description|truncatechars:350}} </p><span> <a href=""> Read More</a></span>
+                            <h5><a href="{% url 'blog' %}">{{ blog.heading|truncatechars:100 }}</a></h5>
+                            <p>{{blog.description|truncatechars:350}} </p><span> <a href="{% url 'blog' %}"> Read More</a></span>
                         </div>
                     </div>
                 </div>
@@ -324,10 +322,7 @@
             height: 6rem;
         }
         </style>
-            <!-- Page Preloder -->
-            <div id="preloder">
-                <div class="loader"></div>
-            </div>
+
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>

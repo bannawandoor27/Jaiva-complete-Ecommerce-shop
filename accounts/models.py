@@ -72,8 +72,9 @@ class Address(models.Model):
     district=models.CharField(max_length=20)
     state=models.CharField(max_length=20)
     country=models.CharField(max_length=20)
-    pin_code=models.CharField(max_length=20)
+    pin_code=models.IntegerField(null=True)
     primary_address=models.BooleanField(default=True)
+    order_note = models.CharField(max_length=500,default='')
 
 
     def __str__(self):

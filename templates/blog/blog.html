@@ -1,0 +1,98 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content%}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section "   >
+    <div class="container-fluid  w-100  p-4 mt-0  " style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Blog</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home' %}">Home</a>
+                        <span>Blog</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+    <!-- Blog Section Begin -->
+    <section class="blog spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-5">
+                    <div class="blog__sidebar">
+                        <div class="blog__sidebar__item">
+                            <h4>Recent News</h4>
+                            <div class="blog__sidebar__recent">
+                                {% for blog in recent_blogs %}
+                                <a href="{% url 'blog_details' blog.id %}" class="blog__sidebar__recent__item">
+                                    <div class="blog__sidebar__recent__item__pic">
+                                        <img src="{{blog.image.url}}" alt="" style="height: 3rem; width: 3rem;">
+                                    </div>
+                                    <div class="blog__sidebar__recent__item__text">
+                                        <h6>{{blog.heading}}</h6>
+                                        <span>{{blog.modified_date}}</span>
+                                    </div>
+                                </a>
+                               {% endfor %}
+                            </div>
+                        </div>    
+                        {% comment %}
+                        <div class="blog__sidebar__item">
+                            <h4>Search By</h4>
+                            <div class="blog__sidebar__item__tags">
+                                <a href="#">Apple</a>
+                                <a href="#">Beauty</a>
+                                <a href="#">Vegetables</a>
+                                <a href="#">Fruit</a>
+                                <a href="#">Healthy Food</a>
+                                <a href="#">Lifestyle</a>
+                            </div>
+                        </div>
+                        {% endcomment %}
+                    </div>
+                </div>
+                <div class="col-lg-8 col-md-7">
+                    <div class="row">
+                        {% for blog in all_blogs %}
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="blog__item">
+                                <div class="blog__item__pic">
+                                    <a href="{% url 'blog_details' blog.id %}"><img src="{{blog.image.url}}" alt="" style="height:15rem;" ></a>
+                                </div>
+                                <div class="blog__item__text">
+                                    <ul>
+                                        <li><i class="fa fa-calendar-o"></i> {{blog.modified_date}}</li>
+                                        
+                                        {% comment %}
+                                        <li><i class="fa fa-comment-o"></i> 5</li>
+                                        {% endcomment %}
+                                            
+                                    </ul>
+                                    <h5><a href="{% url 'blog_details' blog.id %}">{{blog.heading}}</a></h5>
+                                    <p>{{blog.description|truncatechars:350}} </p>
+                                    <a href="{% url 'blog_details' blog.id %}" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <div class="col-lg-12">
+                            <div class="product__pagination blog__pagination">
+                                <a href="#">1</a>
+                                <a href="#">2</a>
+                                <a href="#">3</a>
+                                <a href="#"><i class="fa fa-long-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section End -->
+    {% endblock %}

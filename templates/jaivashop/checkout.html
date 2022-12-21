@@ -24,11 +24,12 @@
 </div>
 <!-- Breadcrumb Section End -->
 <!-- Checkout Section Begin -->
+{% include 'includes/alerts.html' %}
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
             <h4>Billing Details</h4>
-            <form action="" method="POST">
+            <form action="{% url 'place_order' %}" method="POST">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-8 col-md-6">
@@ -96,7 +97,7 @@
                                         <div class="col-12 d-block ml-2">
                                             <p class="card-text mb-0 h2 text-center"><b>No addresses found in your account!</b></p>
                                         </div>
-                                        <a href="" class="col-3 btn text-white mx-auto mt-3"  style="background-color: #0A66C2;">Add Address</a>
+                                        <a href="{% url 'add_address'%}" class="col-3 btn text-white mx-auto mt-3"  style="background-color: #0A66C2;">Add Address</a>
                                     </div>
                                     
                                 </div>              

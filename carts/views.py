@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from accounts.models import Account, Address
-from jaivashop.models import Product, Variation
+from jaivashop.models import Product, Variation,Wishlist,WishlistItem
 from orders.models import Coupon, UserCoupon
 from .models import Cart, CartItem
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,7 +19,17 @@ def _cart_id(request):
 
 def add_cart(request, product_id):
     current_user = request.user
+    
+    
     product = Product.objects.get(id=product_id) #get the product
+    #Delete from wishlist if exists
+    try:
+        wishlist_item = WishlistItem.objects.get(user=current_user,product=product)
+        wishlist_item.delete()
+    except:
+        pass
+
+
     # If the user is authenticated
     if current_user.is_authenticated:
         product_variation = []
@@ -131,6 +141,7 @@ def add_cart(request, product_id):
                 cart_item.variations.clear()
                 cart_item.variations.add(*product_variation)
             cart_item.save()
+
         return redirect('cart')
 
 
@@ -204,7 +215,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
 def checkout(request, total=0, quantity=0, cart_items=None):
   tax=0
   grand_total=0
-  user=Account.objects.filter(id= request.user.id)
+  
   address = Address.objects.filter(user = request.user)
   
   try:
@@ -242,7 +253,7 @@ def checkout(request, total=0, quantity=0, cart_items=None):
  
   
   context = {
-    'user':user,
+    'user':request.user,
     'address':address,
     'total':total,
     'quantity':quantity,

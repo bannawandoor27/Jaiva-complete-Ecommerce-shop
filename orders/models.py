@@ -34,14 +34,15 @@ class Order(models.Model):
     order_number = models.CharField(max_length=30)
     first_name = models.CharField(max_length=50, default='')
     last_name   = models.CharField(max_length=50, default='')
-    phone = models.CharField(max_length=15, default='')
+    phone_number= models.CharField(max_length=15, default='')
     email = models.EmailField(max_length=50, default='')
-    address_line1 = models.CharField(max_length=50, default='')
-    address_line2 = models.CharField(max_length=50,blank=True)
+    address_line_1 = models.CharField(max_length=50, default='')
+    address_line_2 = models.CharField(max_length=50,blank=True)
     state =   models.CharField(max_length=50, default='')
     district =   models.CharField(max_length=50, default='')
     city =   models.CharField(max_length=50, default='')
-    pincode =   models.IntegerField(default=0)
+    country =   models.CharField(max_length=50, default='')
+    pin_code =   models.IntegerField(default=0)
     order_note = models.CharField(max_length=100, blank=True)
     order_total = models.FloatField()
     order_discount = models.FloatField(default=0)
@@ -61,7 +62,7 @@ class Order(models.Model):
         return f'{self.first_name} {self.last_name}'
     
     def full_address(self):
-        return f'{self.address_line1} {self.address_line2}'
+        return f'{self.address_line_1} {self.address_line_2}'
       
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='user_order_page')
