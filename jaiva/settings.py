@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'adminpanel',
     'category',
     'blog',
-    
+    'bootstrap4',
+    'carts',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +81,10 @@ TEMPLATES = [
                 'jaivashop.context_processors.today_special1',
                 'jaivashop.context_processors.today_special2',
                 'blog.context_processors.blog_data',
+                'carts.context_processors.counter',
+                'jaivashop.context_processors.wishlist_counter',
+                'carts.context_processors.total'
+                
             ],
         },
     },
@@ -135,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Calcutta'
 
 USE_I18N = True
 
@@ -183,3 +189,9 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'bannawandoor@gmail.com'
 EMAIL_HOST_PASSWORD = 'tzkwaetuuajeyazu'
 EMAIL_USE_TLS = True
+
+# RZORPAY configuration
+RAZOR_KEY_ID = 'rzp_test_yEhRN8OmXfdruZ'
+RAZOR_KEY_SECRET = 'AMT1S7fGJUlWEy5M9KLyWwsz'
+
+SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'

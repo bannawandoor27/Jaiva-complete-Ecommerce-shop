@@ -1,7 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from category.models import Category, Sub_Category
-
+from accounts.models import Account
 # Create your models here.
 
 class Product(models.Model):
@@ -32,6 +32,8 @@ class Product(models.Model):
   def get_url(self):
     return reverse('product_details', args=[self.category.slug, self.sub_category.slug, self.slug])
   
+ 
+  
   def __str__(self):
     return self.product_name
   
@@ -44,3 +46,43 @@ class Product(models.Model):
         return int(product_offer)
     else:
         return category_offer
+
+
+
+class VariationManager(models.Manager):
+  def weights(self):
+    return super(VariationManager, self).filter(variation_category='weight', is_active=True)
+  
+variation_category_choice =  (
+    ('weight','weight'),
+)
+
+class Variation(models.Model):
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  variation_category = models.CharField(max_length=100, choices=variation_category_choice)
+  variation_value = models.CharField(max_length=100)
+  is_active = models.BooleanField(default=True)
+  created_date = models.DateTimeField(auto_now=True)
+
+  objects = VariationManager()
+
+
+  def __str__(self):
+    return self.variation_value
+
+
+class Wishlist(models.Model):
+  wishlist_id = models.CharField(max_length=250, blank=True)
+  date_added = models.DateField(auto_now_add=True)
+  
+  def __str__(self):
+    return self.wishlist_id
+
+class WishlistItem(models.Model):
+  user = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
+  product = models.ForeignKey(Product, on_delete=models.CASCADE)
+  wishlist = models.ForeignKey(Wishlist,on_delete=models.CASCADE,null=True)
+  is_active = models.BooleanField(default=True)
+  cart_status = models.BooleanField(default=False)
+  def __unicode__(self):
+    return self.product

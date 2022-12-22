@@ -1,4 +1,10 @@
 from django.shortcuts import render, redirect
+import requests
+
+
+from carts.models import Cart, CartItem
+from carts.views import _cart_id
+from orders.models import Order,OrderProduct
 from .models import Account, Address
 from .forms import RegistrationForm, UserAddressForm, UserForm
 from django.contrib import messages, auth
@@ -41,7 +47,7 @@ def register(request):
             # USER ACTIVATION
             current_site = get_current_site(request)
             mail_subject = 'Please activate your account'
-            message = render_to_string('Customers/account_verify_email.html', {
+            message = render_to_string('customers/account_verify_email.html', {
                 'user': user,
                 'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -51,6 +57,8 @@ def register(request):
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
             # messages.success(request, 'Thank you for registering with us. We have sent you a verification email to your email address [rathan.kumar@gmail.com]. Please verify it.')
+            address = Address.objects.create(user=user)
+            address.save()
             return redirect('login/?command=verification&email='+email)
         else:
             messages.error(request, 'please fill the form correctly!')
@@ -61,7 +69,7 @@ def register(request):
         'form': form
     }
 
-    return render(request, 'Customers/signup.html', context)
+    return render(request, 'customers/signup.html', context)
 
 def activate(request, uidb64, token):
     try:
@@ -95,16 +103,59 @@ def login(request):
         user = auth.authenticate(email=email, password=password)
 
         if user is not None:
+            try:
+                cart = Cart.objects.get(cart_id=_cart_id(request))
+                is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
+        
+                if is_cart_item_exists:
+                    cart_item = CartItem.objects.filter(cart=cart)
+                    product_variation = []
+                    for item in cart_item:
+                        variations = item.variations.all()
+                        product_variation.append(list(variations))
+                    cart_item = CartItem.objects.filter(user=user)
+
+                    ex_var_list = []
+                    id = []
+                    for item in cart_item:
+                        existing_variation = item.variations.all()
+                        ex_var_list.append(list(existing_variation))
+                        id.append(item.id)
+
+                    for product in product_variation:
+                        if product in ex_var_list:
+                            index = ex_var_list.index(product)
+                            item_id = id[index]
+                            item = CartItem.objects.get(id=item_id)
+                            item.quantity += 1
+                            item.user = user
+                            item.save()
+                        else:
+                            cart_item = CartItem.objects.filter(cart=cart)    
+                            for item in cart_item:
+                                item.user = user
+                                item.save()
+            except:
+                pass
+
+
 
             auth.login(request, user)      # login without otp
-            request.session['email'] = email
-        #   messages.success(request, 'You are now logged in.')
-            return redirect('home')
+            url = request.META.get('HTTP_REFERER')
+            try:
+                query = requests.utils.urlparse(url).query
+                # next=/cart/checkout/
+                params = dict(x.split('=') for x in query.split('&'))
+                if 'next' in params:
+                    nextPage = params['next']
+                    return redirect(nextPage)
+            except:
+                return redirect('home')
         else:
             messages.error(request, 'Invalid credentials')
             return redirect('login')
 
-    return render(request, 'Customers/login.html')
+    return render(request, 'customers/login.html')
 
 
 
@@ -118,7 +169,7 @@ def logout(request):
     return redirect('login')
 
 def edit_profile(request):
-    useraddress = get_object_or_404(Address, user = request.user)
+    useraddress = Address.objects.all().filter(user=request.user).first()
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         address_form = UserAddressForm(request.POST, instance=useraddress)
@@ -142,7 +193,7 @@ def edit_profile(request):
                 'address_form': address_form
             }
         #  full_name = str(user.first_name) + str(user.last_name)   
-    return render(request, 'Customers/edit_profile.html', context)
+    return render(request, 'customers/edit_profile.html', context)
 
 def forgot_password(request):
     if request.method == 'POST':
@@ -153,7 +204,7 @@ def forgot_password(request):
             # Reset password email
             current_site = get_current_site(request)
             mail_subject = 'Reset Your Password'
-            message = render_to_string('Customers/reset_password_email.html', {
+            message = render_to_string('customers/reset_password_email.html', {
                 'user': user,
                 'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -168,7 +219,7 @@ def forgot_password(request):
         else:
             messages.error(request, 'Account does not exist!')
             return redirect('forgotPassword')
-    return render(request, 'Customers/forgot_password.html')
+    return render(request, 'customers/forgot_password.html')
 
 def resetpassword_validate(request, uidb64, token):
     try:
@@ -184,6 +235,38 @@ def resetpassword_validate(request, uidb64, token):
     else:
         messages.error(request, 'This link has been expired!')
         return redirect('login')
+
+
+
+
+
+@login_required(login_url='userLogin')
+def add_address(request):
+    if request.method == 'POST':
+        form = UserAddressForm(request.POST,request.FILES,)
+        if form.is_valid():
+            print('form is valid')
+            address = Address()
+            address.user = request.user
+            address.address_line_1 =  form.cleaned_data['address_line_1']
+            address.address_line_2  = form.cleaned_data['address_line_2']
+            address.district =  form.cleaned_data['district']
+            address.state =  form.cleaned_data['state']
+            address.city =  form.cleaned_data['city']
+            address.country = form.cleaned_data['country']
+            address.pin_code =  form.cleaned_data['pin_code']
+            address.save()
+            messages.success(request,'Address added Successfully')
+            return redirect('edit_profile')
+        else:
+            messages.success(request,'Form is Not valid')
+            return redirect('add_address')
+    else:
+        form = UserAddressForm()
+        context={
+            'form':form
+        }    
+    return render(request,'customers/add_address.html',context)
 
 def reset_password(request):
     if request.method == 'POST':
@@ -201,11 +284,16 @@ def reset_password(request):
             messages.error(request, 'Password do not match!')
             return redirect('reset_password')
     else:
-        return render(request, 'Customers/reset_password.html')
+        return render(request, 'customers/reset_password.html')
 
 @login_required
 def user_dashboard(request):
-    return render(request,'Customers/dashboard.html')
+    order_count = Order.objects.filter(user=request.user,is_ordered=True).count()
+    print(order_count)
+    context = {
+        'order_count': order_count
+    }
+    return render(request,'customers/dashboard.html',context)
 
 
 @login_required
@@ -232,10 +320,32 @@ def change_password(request):
         else:
             messages.error(request, 'Password does not match!')
             return redirect('change_password')
-    return render(request, 'Customers/change_password.html')
+    return render(request, 'customers/change_password.html')
 
+@login_required(login_url='login')
+def my_orders(request):
+    all_orders = Order.objects.filter(user=request.user,is_ordered=True).order_by('-created_at')
+    context = {
+        'all_orders': all_orders
 
+    }
+    print(all_orders.count())
+    return render(request,'customers/my_orders.html',context)
+@login_required(login_url='login')
+def order_details(request,order_number):
+    order_details = OrderProduct.objects.filter(order__order_number=order_number)
+    order = Order.objects.get(order_number=order_number)
+    subtotal = 0
+    for order_product in order_details:
+        subtotal += order_product.product.offer_price() * order_product.quantity
+        
+    context = {
+        'order_details':order_details,
+        'order':order,
+        'subtotal':subtotal    
+    }
 
+    return render(request,'customers/order_details.html',context)
 
 
 

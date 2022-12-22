@@ -1,14 +1,20 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="zxx">
 
+<!DOCTYPE html>
+{% block bootsrap %}
+    {% load bootstrap4 %}
+    {# CSS Bootstrap #}
+    {% bootstrap_css %} 
+{% endblock bootsrap %}
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <meta name="description" content="Ogani Template">
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %} {% endblock title %}</title>
+    <link rel="icon" type="image/x-icon" href="{% static '/img/logo.png'%}">
+    <title>Jaiva</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -29,23 +35,74 @@
     <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
     <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
     <link rel="stylesheet" href="" type="text/css">
-    <script>
+    <!-- <script>
         setTimeout(function(){
             if ($('#msg').length > 0) {
                 $('#msg').remove();
             }
         }, 3000)    // 2000 millisecond
-      </script>
+      </script> -->
+      <style>
+        .tooltip {
+                    position: relative;
+                    display: inline-block;
+                    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+                    }
+        .tooltip .tooltiptext {
+                                visibility: hidden;
+                                width: 120px;
+                                background-color: black;
+                                color: #fff;
+                                text-align: center;
+                                padding: 5px 0;
+                                border-radius: 6px;
+                                
+                                /* Position the tooltip text - see examples below! */
+                                position: absolute;
+                                z-index: 1;
+                                }
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+      </style>
 
     
 </head>
 <body style="background-color: rgb(255, 255, 255);">
+                <!-- Page Preloder -->
+                <div id="preloder">
+                    <div class="loader"></div>
+                </div>
 
 <!-- navbar content --> {% include 'includes/navbar.html' %}
-<!-- {% include 'includes/alerts.html' %} -->
+
 {% block content %}
 
 <!-- Type contents here -->
 {% endblock content%}
 
+<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'js/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/jquery.slicknav.js' %}"></script>
+<script src="{% static 'js/mixitup.min.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src=""></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script>
+    function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: 'true',
+    layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL
+    }, 'google_translate_element');
+    }
+    $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+    </script>
+    <script src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'></script>
 <!-- footer content -->  {% include 'includes/footer.html' %}

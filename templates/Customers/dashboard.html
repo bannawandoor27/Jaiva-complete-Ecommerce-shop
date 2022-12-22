@@ -6,8 +6,8 @@
 
 <!-- Breadcrumb Section Begin -->
 <div class="">
-    <section class="breadcrumb-section set-bg ">
-        <div class="container set-bg w-100 set-bg p-4 mt-0  "
+    <section class="breadcrumb-section pb-5 ">
+        <div class="container-fluid  w-100  p-4 mt-0  "
             style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
             <div class="row ">
                 <div class="col-lg-12 text-center">
@@ -39,8 +39,8 @@
 	<main class="col-md-9">
 		<article class="card">
 		<header class="card-header">
-			<strong class="d-inline-block mr-3">Logged in as:</strong>
-			<span class="text-black">{{user.first_name|capfirst}} </span>
+			Hello
+			<strong><span class="text-black">{{user.first_name|capfirst}} {{user.last_name}} ! </span></strong>
 		</header>
 		<div class="card-body">
 			<div class="row">
@@ -48,9 +48,11 @@
 			<div class="col-md-6">
 				<div class="card" style="text-align:center;">
 					<div class="card-body">
-						<h5 class="card-title">Total Orders</h5>
-						<h4></h4>
-						<a href="">View Orders</a>
+						<h5 class="card-title">Total Orders : <strong> {{order_count}}</strong></h5> 
+							
+						
+						
+						<a href="{% url 'my_orders' %}" class="btn btn-outline-success btn-sm">View Orders</a>
 					</div>
 				</div>
 			</div>

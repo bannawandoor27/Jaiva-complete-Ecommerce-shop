@@ -1,20 +1,21 @@
-{% if messages %}
-<script>
+
+<!-- <script>
     setTimeout(function(){
         if ($('#msg').length > 0) {
             $('#msg').remove();
         }
     }, 3000)    // 2000 millisecond
-  </script>
+  </script> -->
 
-    {% for message in messages %}
-    <div id="message" class="container" >
-    <div id="msg" {% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %} role="alert">
-      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Error: {% endif %}
-        {{ message }}
-    </div>
-    </div>
-    {% endfor %}
-
-{% endif %}
+  {% if messages %}
+  <div id="messages" class="messages">
+      {% for message in messages %}
+      <div {% if message.tags %} class="alert alert-{{ message.tags }} alert-dismissible fade show text-center"{% endif %} role="alert">
+          {% if message.level == DEFAdivT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+          {{ message }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span>
+          </button>
+      </div>
+      {% endfor %}
+  </div>
+  {% endif %}

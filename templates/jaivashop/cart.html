@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}    
+    <!-- Breadcrumb Section Begin -->
+<div class="">
+    <section class="breadcrumb-section pb-5 ">
+        <div class="container-fluid  w-100  p-4 mt-0  "
+            style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
+            <div class="row ">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Cart</h2>
+                        <div class="breadcrumb__option">
+                            <a href="{% url 'home' %}">Home</a>
+                            <span>Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Breadcrumb Section End -->
+
+{% if not cart_items %}
+
+<div class="mt-5">
+  <h2 class="text-center">Your haven't added anything to cart!</h2>
+  <div class="text-center m-5">
+    <a href="{% url 'shop' %}" class="btn btn-success" style="background-color: #0A66C2;">Continue Shopping</a>
+  </div>
+</div>
+
+{% else %}
+
+<!-- Shoping Cart Section Begin -->
+<section class="shoping-cart spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="shoping__product">Products</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                          {% for cart_item in cart_items %}
+
+                          <tr>
+                            <td class="shoping__cart__item">
+                                <img src="{{cart_item.product.image_1.url}}" alt="" style="height: 6rem;width: 6rem;">
+                                <a href="{{cart_item.product.get_url}}"><h5>{{cart_item.product.product_name}} <br>  <small style="text-secondary">1 {{cart_item.product.unit}}</small> </h5></a>
+                               
+                                <p class="text_muted">
+                                    {% if cart_item.variations.all %}
+                                        {% for item in cart_item.variations.all %}
+                                            {{item.variation_category | capfirst }} : {{item.variation_value}} <br>
+                                            {% endfor %}
+                                            {% endif %}
+
+                                </p>
+                            </td>
+                            <td class="shoping__cart__price">
+                                ₹{{cart_item.product.offer_price}}
+                            </td>
+                            
+                            <td class="shoping__cart__quantity ">
+                                <div class="quantity d-flex " style="margin-left: 3rem;">
+                                    <a href="{% url 'remove_cart' cart_item.product.id cart_item.id %}" class="btn btn-light" type="button" id="button-minus">-</i> </a>
+                                    <div>
+                                    <input type="text" value="{{cart_item.quantity}}" class="form-control input-sm text-center" readonly style="width: 3rem;">
+                                    </div>
+                                    <a href="{% url 'add_cart' cart_item.product.id %}" class="btn btn-light" type="button" id="button-plus">+</a>
+                                </div>
+                            </td>
+                            <td class="shoping__cart__total"  id="total{{forloop.counter}}"> ₹{{cart_item.sub_total}} </td>
+                            <td class="shoping__cart__item__close">
+                                <a data-toggle="modal" data-target="#Modal{{forloop.counter}}">
+                                    <span class="icon_close"></span></a>
+                            </td>
+                        </tr>
+
+                                  <!-- Modal -->
+                                  <div class="modal fade" id="Modal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                          </button>
+                                          </div>
+                                          <div class="modal-body text-left">
+                                              Are you sure to remove <b>{{cart_item.product.product_name}}</b> from cart?
+                                          </div>
+                                          <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                          <a href="{% url 'remove_cart_item' cart_item.product.id cart_item.id %}" type="button" class="btn btn-danger">Yes</a>
+                                          </div>
+                                      </div>
+                                      </div>
+                                  </div>
+                              </td>
+                          </tr>
+
+                          {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shoping__cart__btns">
+                    <a href="{% url 'shop' %}" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+            </div>
+            <div class="col-lg-6">
+                <div class="shoping__checkout">
+                    <h5>Cart Total</h5>
+                    <ul>
+                        <li>Subtotal <span id="total">₹{{total}}</span></li>
+                        <li>GST <span id="tax">₹{{tax}}</span></li>
+                        <li>Total <span id="grand_total">₹{{grand_total}}</span></li>
+                    </ul>
+                    <a href="{% url 'checkout' %}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Shoping Cart Section End -->
+{% endif %}
+<style>
+    .pro-qty {
+	width: 140px;
+	height: 50px;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	background: #f5f5f5;
+	margin-bottom: 5px;
+}
+
+.pro-qty input {
+	height: 100%;
+	width: 100%;
+	font-size: 16px;
+	color: #6f6f6f;
+	width: 50px;
+	border: none;
+	background: #f5f5f5;
+	text-align: center;
+}
+
+.pro-qty .qtybtn {
+	width: 35px;
+	font-size: 16px;
+	color: #6f6f6f;
+	cursor: pointer;
+	display: inline-block;
+}
+</style>
+  {% endblock content %}

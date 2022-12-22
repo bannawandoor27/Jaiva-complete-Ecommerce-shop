@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Breadcrumb Section Begin -->
+<div class="">
+    <section class="breadcrumb-section pb-5 ">
+        <div class="container-fluid  w-100  p-4 mt-0  "
+            style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
+            <div class="row ">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Checkout</h2>
+                        <div class="breadcrumb__option">
+                            <a href="{% url 'home' %}">Home</a>
+                            <a href="{% url 'cart' %}">Cart</a>
+                            <span>Checkout</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<!-- Breadcrumb Section End -->
+<!-- Checkout Section Begin -->
+{% include 'includes/alerts.html' %}
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout__form">
+            
+            <h4>Delivery Details</h4>
+            <form action="{% url 'place_order' %}" method="POST">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-lg-8 col-md-6">
+                        <div class="card mb-3">
+
+                            {% if address %}
+
+                            <h5 class="card-header">DELIVERY ADDRESS</h5>    
+
+                            {% for item in address %}
+
+                            <div class="card-body form-check row">
+                                    <div class="col-12">
+            
+                                        {% if forloop.counter == 1 %}
+                                        <input class="form-check-input d-block ml-1 mt-2" value="{{item.id}}" type="radio" name="flexRadioDefault" checked>
+                                        {%else%}
+                                        <input class="form-check-input d-block ml-1 mt-2" value="{{item.id}}" type="radio" name="flexRadioDefault">
+                                        {%endif%}
+                                        
+                                        <div class="d-block ml-4">
+                                            <p class="card-text mb-0"><b>{{user.first_name}}</b> , {{item.address_line_1}}, {{item.address_line_2}}, {{item.city}}, {{item.district}}, {{item.state}}, {{item.pincode}}</p>
+                                            <p class="cart-text mb-0">{{user.email}}</p>
+                                            <p class="cart-text mb-0">{{user.phone_number}}</p>
+                                            <a href="" data-toggle="modal" data-target="#Modal{{forloop.counter}}" class="btn btn-outline-danger"> Remove</a>
+                                                                            <!-- Modal -->
+                                  <div class="modal fade" id="Modal{{forloop.counter}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                        <div class="modal-body text-left">
+                                            Are you sure to remove this address
+                                        </div>
+                                        <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a href="{% url 'delete_address' item.id %}" type="button" class="btn btn-danger">Yes</a>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                        </div>
+                                    </div>              
+                                </div>                           
+                                <hr>
+                            {%endfor%}
+                            <div class="card-body form-check row">
+                                <div class="col-12  py-2">
+                                    <div class="row d-flex align-content-center">
+                                        <div class="col-12 d-block ml-2 d-flex">
+                                            <p class="card-text mt-1 h5"><b class="text-center">Add New Address</b></p>
+                                            <a href="{%url 'add_address' %}" class="col-3 btn ml-auto mr-5 text-white"  style="background-color: #0A66C2;">Add</a>
+                                        </div>
+                                    </div>
+                                    
+                                </div>              
+                            </div>
+                            {%else%}
+                            <div class="card-body form-check row d-flex align-items-center" style="height: 328px;">
+                                <div class="col-12  py-5">
+                                    <div class="row d-flex align-content-center">
+                                        <div class="col-12 d-block ml-2">
+                                            <p class="card-text mb-0 h2 text-center"><b>No addresses found in your account!</b></p>
+                                        </div>
+                                        <a href="{% url 'add_address'%}" class="col-3 btn text-white btn-primary mx-auto mt-3"  style="background-color: #0A66C2;">Add</a>
+                                    </div>
+                                    
+                                </div>              
+                            </div>
+                            {%endif%}                          
+
+                        </div>
+
+                                <form action="#">
+                                </form>
+
+                             
+                                    <input type="button" value="Do you have a coupon?" onclick="displayCoupon()" class="btn btn-outline-secondary " >
+                                
+
+                                <div class="shoping__continue" id="applycoupon" style="opacity: 0; transition: opacity 0.5s;">
+                                    <div class="shoping__discount">
+                                        <h5>Discount Codes</h5>
+                                        <form id="coupon_form">
+                                            <input type="text" id="coupon_data" placeholder="Enter your coupon code">
+                                            <button type="submit" class="site-btn">APPLY COUPON</button>
+                                        </form>
+                                    </div>
+                                    <p class="text-danger mt-3" id="output"></p>
+                                </div>
+        
+                                {% if coupons %}
+                                <div class="accordion mt-3 shoping__discount" id="accordionExample">
+                                   
+                                </div>
+                                {%endif%}
+        
+                        
+
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="checkout__order">
+                            <h4>Your Order</h4>
+                            <div class="checkout__order__products">Products <span>Price</span></div>
+                            <ul>
+                                {% for cart_item in cart_items %}
+
+                                <li>{{cart_item.product.product_name}} <br>
+
+                                    {% for item in cart_item.variations.all %}
+
+                                    {{item.variation_category | capfirst}} : {{item.variation_value | capfirst}}
+
+                                    {% endfor %}
+                                    
+                                      <p class="d-inline font-weight-bold">{{cart_item.quantity}} {{cart_item.product.unit}}</p class="d-inline f-3"><span>₹{{cart_item.sub_total}}</span></li>
+
+                                     <hr>
+
+                                {% endfor %}
+                            </ul>
+                            <div class="checkout__order__total">Subtotal <span>₹{{total}}</span></div>
+                            <div class="checkout__order__total">Tax <span>₹{{tax}}</span></div>
+                            <div class="checkout__order__total" id="coupon_block" style="display: none;">Discount <span>- ₹<b id="coupon_discount"></b></span>
+                            <h1 class="text-danger" style="font-size: 12px;">*Coupon Applied - <b id="coupon_code"></b></h1>
+                            </div>
+                            <div class="checkout__order__total">Total <span id='grand_total'>₹{{grand_total}}</span></div>
+                            <input type="text" name="coupon" id="coupon_code1" style="display: none;">
+                            <button type="submit" class="site-btn">PROCEED TO PAYMENT</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    $('#coupon_form').on('submit', function(e){
+             
+        e.preventDefault();
+        
+          $.ajax({
+               type : "POST", 
+               url: "{% url 'coupon' %}",
+               data: {
+                   coupon : $('#coupon_data').val(),
+                   grand_total : '{{grand_total}}',
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+                dataType: "json",
+        
+               },
+               
+               success: function(data){
+                  $('#output').html(data.msg) /* response message */
+                  $('#grand_total').text('₹'+data.grand_total)
+                  if (data.coupon_discount > 0) {
+                      $('#coupon_block').show()
+                      $('#accordionExample').hide()
+                  }
+                  $('#coupon_discount').html(data.coupon_discount)
+                  $('#coupon_code').html(data.coupon_code)
+                  $('#coupon_code1').val(data.coupon_code)
+
+                  
+               },
+        
+               failure: function() {
+                   
+               }
+        
+        
+           });
+        
+        
+                });  
+
+</script>
+<script>
+    function displayCoupon() {
+  var x = document.getElementById("applycoupon");
+  if (x.style.opacity == 0) {
+    x.style.opacity = 1;
+  } else {
+    x.style.opacity = 0;
+  }
+}
+</script>
+
+
+
+    
+{% endblock content %}
+    
