@@ -30,7 +30,23 @@
 <body>
 
     {% include 'includes/navbar.html' %}
-
+    <!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section "   >
+    <div class="container-fluid  w-100  p-4 mt-0  " style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Payments</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home' %}">Home</a>
+                        <span>Payments</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
     <!-- ...:::: Start Cart Section:::... -->
     <div class="cart-section my-5">
         <!-- Start Coupon Start -->
@@ -41,7 +57,7 @@
                     <div class="col-lg-7 clo-md-6">
                         <div class="coupon_code left" data-aos="fade-up" data-aos-delay="200">
                             <div class="card">
-                                <h5 class="card-header text-center font-weight-bold">Billing Address</h5>
+                                <h5 class="card-header text-center font-weight-bold">Delivery Address</h5>
                                 <div class="card-body">
                                   <p class="card-text mb-0">{{order.full_name}}</p>
                                   <p class="card-text mb-0">{{order.full_address}}</p>
@@ -135,7 +151,7 @@
                                             <img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/89/Razorpay_logo.svg/1200px-Razorpay_logo.svg.png?20171127075036" alt="RazorPay"  width="150px">
                                             </button>
                                             <!-- paypal button -->
-                                            <div id="paypal-button-container" class="col-12"></div>
+                                            <!-- <div id="paypal-button-container" class="col-12"></div> -->
                                         </div>
                                         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                           <div class="modal-dialog" role="document">

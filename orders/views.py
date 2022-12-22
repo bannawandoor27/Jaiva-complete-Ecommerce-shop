@@ -206,7 +206,7 @@ def payments_completed(request):
 
         subtotal = 0
         for i in ordered_products:
-            subtotal += i.product_price * i.quantity
+            subtotal += i.product.offer_price() * i.quantity
 
         payment = Payment.objects.get(payment_id=transID)
 
@@ -270,7 +270,7 @@ def cash_on_delivery(request,id):
         
         subtotal = 0
         for i in ordered_products:
-            subtotal += i.product_price * i.quantity
+            subtotal += i.product.offer_price() * i.quantity 
         
         context ={
           'order':order,
@@ -295,7 +295,7 @@ def cancel_order(request,id):
     if request.user.is_superadmin:
       return redirect('orders')
     else:
-      return redirect('orderDetails', id)
+      return redirect('order_details', id)
 def return_order(request, id):
   if request.method == 'POST':
     return_reason = request.POST['return_reason']
@@ -307,7 +307,7 @@ def return_order(request, id):
   order.save()
   payment = Payment.objects.get(order_id = order.order_number)
   payment.delete()
-  return redirect('orderDetails', id)
+  return redirect('order_details', id)
 
 def razorpay(request):
   

@@ -14,13 +14,13 @@
     </div>
     <div class="humberger__menu__widget">
         <div class="header__top__right__language col-sm mb-2">
-            <div id='google_translate_element' class="header__top__right__social "></div> 
+     
             
         </div>
                       {% if user.is_authenticated %}
 
                           <div class="header__top__right__auth col">
-                              <a href="" class="btn btn-light"><i class="fa fa-user-circle" aria-hidden="true"></i><strong>{{user.first_name}}</strong></a>
+                              <a href="{% url 'user_dashboard' %}" class="btn btn-light"><i class="fa fa-user" aria-hidden="true"></i><strong>{{user.first_name}}</strong></a>
                           </div>
                           <span class="ml-2 mr-2">|</span>
                           <div class="header__top__right__auth">
@@ -81,6 +81,7 @@
                  <div class="col-lg-6 col-md-6">
                      <div class="header__top__right">
                         <div id='google_translate_element' class="header__top__right__social "></div> 
+                    
                          <div class="header__top__right__social">
                            
                              <a href="#"><i class="fa fa-facebook"></i></a>

@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 import requests
 
+
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
+from orders.models import Order,OrderProduct
 from .models import Account, Address
 from .forms import RegistrationForm, UserAddressForm, UserForm
 from django.contrib import messages, auth
@@ -45,7 +47,7 @@ def register(request):
             # USER ACTIVATION
             current_site = get_current_site(request)
             mail_subject = 'Please activate your account'
-            message = render_to_string('Customers/account_verify_email.html', {
+            message = render_to_string('customers/account_verify_email.html', {
                 'user': user,
                 'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -67,7 +69,7 @@ def register(request):
         'form': form
     }
 
-    return render(request, 'Customers/signup.html', context)
+    return render(request, 'customers/signup.html', context)
 
 def activate(request, uidb64, token):
     try:
@@ -153,7 +155,7 @@ def login(request):
             messages.error(request, 'Invalid credentials')
             return redirect('login')
 
-    return render(request, 'Customers/login.html')
+    return render(request, 'customers/login.html')
 
 
 
@@ -191,7 +193,7 @@ def edit_profile(request):
                 'address_form': address_form
             }
         #  full_name = str(user.first_name) + str(user.last_name)   
-    return render(request, 'Customers/edit_profile.html', context)
+    return render(request, 'customers/edit_profile.html', context)
 
 def forgot_password(request):
     if request.method == 'POST':
@@ -202,7 +204,7 @@ def forgot_password(request):
             # Reset password email
             current_site = get_current_site(request)
             mail_subject = 'Reset Your Password'
-            message = render_to_string('Customers/reset_password_email.html', {
+            message = render_to_string('customers/reset_password_email.html', {
                 'user': user,
                 'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -217,7 +219,7 @@ def forgot_password(request):
         else:
             messages.error(request, 'Account does not exist!')
             return redirect('forgotPassword')
-    return render(request, 'Customers/forgot_password.html')
+    return render(request, 'customers/forgot_password.html')
 
 def resetpassword_validate(request, uidb64, token):
     try:
@@ -264,7 +266,7 @@ def add_address(request):
         context={
             'form':form
         }    
-    return render(request,'Customers/add_address.html',context)
+    return render(request,'customers/add_address.html',context)
 
 def reset_password(request):
     if request.method == 'POST':
@@ -282,11 +284,16 @@ def reset_password(request):
             messages.error(request, 'Password do not match!')
             return redirect('reset_password')
     else:
-        return render(request, 'Customers/reset_password.html')
+        return render(request, 'customers/reset_password.html')
 
 @login_required
 def user_dashboard(request):
-    return render(request,'Customers/dashboard.html')
+    order_count = Order.objects.filter(user=request.user,is_ordered=True).count()
+    print(order_count)
+    context = {
+        'order_count': order_count
+    }
+    return render(request,'customers/dashboard.html',context)
 
 
 @login_required
@@ -313,10 +320,32 @@ def change_password(request):
         else:
             messages.error(request, 'Password does not match!')
             return redirect('change_password')
-    return render(request, 'Customers/change_password.html')
+    return render(request, 'customers/change_password.html')
 
+@login_required(login_url='login')
+def my_orders(request):
+    all_orders = Order.objects.filter(user=request.user,is_ordered=True).order_by('-created_at')
+    context = {
+        'all_orders': all_orders
 
+    }
+    print(all_orders.count())
+    return render(request,'customers/my_orders.html',context)
+@login_required(login_url='login')
+def order_details(request,order_number):
+    order_details = OrderProduct.objects.filter(order__order_number=order_number)
+    order = Order.objects.get(order_number=order_number)
+    subtotal = 0
+    for order_product in order_details:
+        subtotal += order_product.product.offer_price() * order_product.quantity
+        
+    context = {
+        'order_details':order_details,
+        'order':order,
+        'subtotal':subtotal    
+    }
 
+    return render(request,'customers/order_details.html',context)
 
 
 

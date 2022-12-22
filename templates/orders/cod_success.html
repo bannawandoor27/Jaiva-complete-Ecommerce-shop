@@ -3,6 +3,23 @@
 {% load static %}
 
 {% block content %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section "   >
+    <div class="container-fluid  w-100  p-4 mt-0  " style="background-image: url( '{% static 'img/breadcrumb.jpg' %}')  ;">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Payments</h2>
+                    <div class="breadcrumb__option">
+                        <a href="{% url 'home' %}">Home</a>
+                        <span>Cash on Delivery</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
 
 <div class="py-5">
   <div class="container">
@@ -85,7 +102,7 @@
                                                         <thead class="thead-dark">
                                                             <tr>
                                                                 <th class="per70 text-center">Products</th>
-                                                                <th class="per5 text-center">Qty</th>
+                                                                <th class="per5 text-center">Quantity</th>
                                                                 <th class="per5 text-center">Price</th>
                                                                 <th class="per25 text-center">Total</th>
                                                             </tr>
@@ -103,8 +120,8 @@
                                                                         {% endif %}
                                                                     </p>
                                                                 </td>
-                                                                <td class="text-center" id="qnty{{forloop.counter}}" style="border:1px solid black">{{item.quantity}}</td>
-                                                                <td class="text-center" id="price{{forloop.counter}}" style="border:1px solid black">{{item.product_price}} </td>
+                                                                <td class="text-center"  style="border:1px solid black"><span id="qnty{{forloop.counter}}">{{item.quantity}} </span> {{item.product.unit}}</td>
+                                                                <td class="text-center" id="price{{forloop.counter}}" style="border:1px solid black">{{item.product.offer_price}} </td>
                                                                 <td class="text-center" id="total{{forloop.counter}}" style="border:1px solid black"></td>
                                                             </tr>
                                                             {% endfor %}

@@ -83,6 +83,7 @@ TEMPLATES = [
                 'blog.context_processors.blog_data',
                 'carts.context_processors.counter',
                 'jaivashop.context_processors.wishlist_counter',
+                'carts.context_processors.total'
                 
             ],
         },
@@ -140,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Calcutta'
 
 USE_I18N = True
 

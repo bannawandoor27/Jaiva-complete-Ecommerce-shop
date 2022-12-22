@@ -131,15 +131,15 @@
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="blog__item">
                         <div class="blog__item__pic">
-                            <img src="{{blog.image.url}}" alt="" style="height: 15rem;">
+                           <a href="{% url 'blog_details' blog.id%}"> <img src="{{blog.image.url}}" alt="" style="height: 15rem;"></a>
                         </div>
                         <div class="blog__item__text">
                             <ul>
-                                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                <li><i class="fa fa-comment-o"></i> 5</li>
+                                <li><i class="fa fa-calendar-o"></i> {{blog.modified_date}}</li>
                             </ul>
-                            <h5><a href="#">Cooking tips make cooking simple</a></h5>
-                            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
+                            <h5><a href="{% url 'blog_details' blog.id%}">{{blog.heading}}</a></h5>
+                            <p>{{blog.description|truncatechars:200}}<a href="{% url 'blog_details' blog.id%}" class="btn btn-link"> Read More</a></p>
+                    
                         </div>
                     </div>
                 </div>

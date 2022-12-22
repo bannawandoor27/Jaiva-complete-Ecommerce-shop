@@ -28,7 +28,8 @@
 <section class="checkout spad">
     <div class="container">
         <div class="checkout__form">
-            <h4>Billing Details</h4>
+            
+            <h4>Delivery Details</h4>
             <form action="{% url 'place_order' %}" method="POST">
                 {% csrf_token %}
                 <div class="row">
@@ -97,7 +98,7 @@
                                         <div class="col-12 d-block ml-2">
                                             <p class="card-text mb-0 h2 text-center"><b>No addresses found in your account!</b></p>
                                         </div>
-                                        <a href="{% url 'add_address'%}" class="col-3 btn text-white mx-auto mt-3"  style="background-color: #0A66C2;">Add Address</a>
+                                        <a href="{% url 'add_address'%}" class="col-3 btn text-white btn-primary mx-auto mt-3"  style="background-color: #0A66C2;">Add</a>
                                     </div>
                                     
                                 </div>              
@@ -109,45 +110,28 @@
                                 <form action="#">
                                 </form>
 
+                             
+                                    <input type="button" value="Do you have a coupon?" onclick="displayCoupon()" class="btn btn-outline-secondary " >
+                                
 
-                        
-                        <div class="shoping__continue">
-                            <div class="shoping__discount">
-                                <h5>Discount Codes</h5>
-                                <form id="coupon_form">
-                                    <input type="text" id="coupon_data" placeholder="Enter your coupon code">
-                                    <button type="submit" class="site-btn">APPLY COUPON</button>
-                                </form>
-                            </div>
-                            <p class="text-danger mt-3" id="output"></p>
-                        </div>
-
-                        {% if coupons %}
-                        <div class="accordion mt-3 shoping__discount" id="accordionExample">
-                            <h5>Available Coupons:</h5>
-                            
-                            {% for item in coupons %}
-
-                            <div class="card w-75">
-                              <div class="card-header" id="headingThree">
-                                <h2 class="mb-0">
-                                  <button class="btn btn-link btn-block text-left collapsed text-danger text-decoration-none" type="button" data-toggle="collapse" data-target="#collapse{{forloop.counter}}" aria-expanded="false" aria-controls="collapseThree">
-                                    <span class="text-dark">{{forloop.counter}}.</span> <b>-{{item.coupon.discount}}% Off</b>
-                                  </button>
-                                </h2>
-                              </div>
-                              <div id="collapse{{forloop.counter}}" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                                <div class="card-body">
-                                    <p><b>*</b>Applicable only  for order price more than <b>₹{{item.coupon.min_value}}\-</b></p>
-                                    <span class="ml-3">Coupon Code: <b class="text-danger">{{item.coupon.code}}</b></span>
+                                <div class="shoping__continue" id="applycoupon" style="opacity: 0; transition: opacity 0.5s;">
+                                    <div class="shoping__discount">
+                                        <h5>Discount Codes</h5>
+                                        <form id="coupon_form">
+                                            <input type="text" id="coupon_data" placeholder="Enter your coupon code">
+                                            <button type="submit" class="site-btn">APPLY COUPON</button>
+                                        </form>
+                                    </div>
+                                    <p class="text-danger mt-3" id="output"></p>
                                 </div>
-                              </div>
-                            </div>
-
-                            {% endfor %}
-
-                        </div>
-                        {%endif%}
+        
+                                {% if coupons %}
+                                <div class="accordion mt-3 shoping__discount" id="accordionExample">
+                                   
+                                </div>
+                                {%endif%}
+        
+                        
 
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -228,7 +212,19 @@
         
         
                 });  
+
 </script>
+<script>
+    function displayCoupon() {
+  var x = document.getElementById("applycoupon");
+  if (x.style.opacity == 0) {
+    x.style.opacity = 1;
+  } else {
+    x.style.opacity = 0;
+  }
+}
+</script>
+
 
 
     
