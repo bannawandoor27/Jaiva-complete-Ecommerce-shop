@@ -55,17 +55,7 @@
                             
                                 
                             <div class="blog__sidebar__recent">
-                                {% for blog in recent_blogs   %}
-                                <a href="{% url 'blog_details' blog.id %}" class="blog__sidebar__recent__item">
-                                    <div class="blog__sidebar__recent__item__pic">
-                                        <img src="{{blog.image.url}}" alt="" style="height: 3rem; width: 3rem;">
-                                    </div>
-                                    <div class="blog__sidebar__recent__item__text">
-                                        <h6>{{blog.heading}}</h6>
-                                        <span>{{blog.modified_date}}</span>
-                                    </div>
-                                </a>
-                                {% endfor %}
+
                             </div>
                         </div>
                         <div class="blog__sidebar__item">
