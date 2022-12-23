@@ -12,7 +12,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 from decouple import config
+import environ
+import os
+from dotenv import load_dotenv
+env = environ.Env()
+environ.Env.read_env()
 
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5+04@4a=ui!a^lx+lwmm0aj7tz(z2hyu+z+i@_l5)l5r^@265&'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -107,11 +113,11 @@ AUTH_USER_MODEL= 'accounts.Account'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'jaiva', 
-        'USER': 'postgres',
-        'PASSWORD': 'banna',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'NAME': os.environ.get('DATABASE_NAME'), 
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'), 
+        'PORT': os.environ.get('DATABASE_PORT'),
     }
 }
 
@@ -173,10 +179,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-AUTH_TOKEN ='d57a688fc7e550d63406ed2006a7610e'
-ACCOUNT_SID ='AC16200e195d4917cba56728779aebe4c8'
-SERVICES_ID = 'MG1bef31e2eeb755f434ea0b553e74f505'
-
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.INFO: '',
@@ -184,14 +186,17 @@ MESSAGE_TAGS = {
 }
 
 # SMTP configuration
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'bannawandoor@gmail.com'
-EMAIL_HOST_PASSWORD = 'tzkwaetuuajeyazu'
-EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
 
 # RZORPAY configuration
-RAZOR_KEY_ID = 'rzp_test_yEhRN8OmXfdruZ'
-RAZOR_KEY_SECRET = 'AMT1S7fGJUlWEy5M9KLyWwsz'
+RAZOR_KEY_ID = os.environ.get('RAZOR_KEY_ID')
+RAZOR_KEY_SECRET = os.environ.get('RAZOR_KEY_SECRET')
+SECURE_CROSS_ORIGIN_OPENER_POLICY= os.environ.get('SECURE_CROSS_ORIGIN_OPENER_POLICY')
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY='same-origin-allow-popups'
+#News API conf
+
+API_KEY = os.environ.get('API_KEY')

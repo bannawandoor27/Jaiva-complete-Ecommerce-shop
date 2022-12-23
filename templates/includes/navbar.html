@@ -129,10 +129,10 @@
                      <ul>
                          <li ><a href="{% url 'home' %}"{% if '/home/' in request.path %} style="color: #0A66C2" {% endif %} >Home</a></li>
                          <li><a href="{% url 'shop' %}" class="active" {% if '/shop/' in request.path %} style="color: #0A66C2;" {% endif %}>Shop</a></li>
-                         <li><a href="{% url 'cart' %}">Cart</a></li>
+                         <li><a href="{% url 'cart' %}"{% if '/cart/' in request.path %} style="color: #0A66C2;" {% endif %}>Cart</a></li>
 
-                         <li><a href="{% url 'blog' %}">Blog</a></li>
-                         <li><a href="./contact.html">Contact</a></li>
+                         <li><a href="{% url 'blog' %}" {% if '/blog/' in request.path %} style="color: #0A66C2;" {% endif %}>Blog</a></li>
+                         <li><a href="./contact.html" {% if '/contact/' in request.path %} style="color: #0A66C2;" {% endif %}>Contact</a></li>
                      </ul>
                  </nav>
              </div>
