@@ -4,7 +4,9 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 from django.contrib import messages
-
+import datetime
+from accounts.models import *
+from orders.models import *
 def admin_login(request):
       if request.method == 'POST':
         email = request.POST['email']
@@ -24,6 +26,10 @@ def admin_login(request):
       return render(request, 'admin_panel/admin_login.html')
 
 def admin_dashboard(request):
+    customers_count = Account.objects.filter(is_admin=False).count()
+    orders_count = Order.objects.all().count()
+    product_count = Product.objects.filter(is_available=True).count()
+
     return render(request,'admin_panel/admin_dashboard.html')
 
 @login_required(login_url='admin_login')
