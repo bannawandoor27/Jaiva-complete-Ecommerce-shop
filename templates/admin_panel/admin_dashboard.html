@@ -2,13 +2,28 @@
 
 {% block content %}
 <div class="row">
+    <div class="mx-3">
+        <h3 class="mb-4">Statisticts of {% if selected_month in request.path %}{{selected_month}} {% else %} All time {% endif %}</h3>
+    </div>
+        <div class="dropdown mx-5">
+            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select month </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton5">
+            {% for month in month_list %}
+            <a class="dropdown-item" href="{% url 'admin_dashboard_monthwise' month %}">{{month}}</a>
+            {% endfor %}
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'admin_dashboard' %}">All time</a>
+            </div>
+        </div>
+</div>
+<div class="row">
 <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
     <div class="card">
       <div class="card-body">
         <div class="row">
           <div class="col-9">
             <div class="d-flex align-items-center align-self-start">
-              <h3 class="mb-0">$12.34</h3>
+              <h3 class="mb-0">{{total_orders}}</h3>
               <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
             </div>
           </div>
@@ -29,7 +44,7 @@
         <div class="row">
           <div class="col-9">
             <div class="d-flex align-items-center align-self-start">
-              <h3 class="mb-0">$12.34</h3>
+              <h3 class="mb-0">{{total_products}}</h3>
               <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
             </div>
           </div>
@@ -49,7 +64,7 @@
         <div class="row">
           <div class="col-9">
             <div class="d-flex align-items-center align-self-start">
-              <h3 class="mb-0">$12.34</h3>
+              <h3 class="mb-0">{{total_customers}}</h3>
               <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
             </div>
           </div>
@@ -69,7 +84,7 @@
         <div class="row">
           <div class="col-9">
             <div class="d-flex align-items-center align-self-start">
-              <h3 class="mb-0">$12.34</h3>
+              <h3 class="mb-0">₹{{total_sales}}</h3>
               <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
             </div>
           </div>

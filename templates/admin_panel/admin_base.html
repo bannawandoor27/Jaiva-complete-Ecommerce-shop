@@ -23,7 +23,7 @@
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
   </head>
-  <body>
+  <body onload="timeCount();">
     <div class="container-scroller">
       <!-- partial:partials/_sidebar.html -->
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -183,11 +183,15 @@
               <li class="nav-item w-100">
                 <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
                   <input type="text" class="form-control" placeholder="Search products">
+                  <div id="clock" class = "btn " style="    margin-left: 2rem;
+                  margin-top: 0.5rem;"></div>
                 </form>
               </li>
             </ul>
             <ul class="navbar-nav navbar-nav-right">
+              
               <li class="nav-item dropdown d-none d-lg-block">
+                
                 <a class="nav-link btn btn-success create-new-button" id="createbuttonDropdown" data-toggle="dropdown" aria-expanded="false" href="#">+ Create New Project</a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="createbuttonDropdown">
                   <h6 class="p-3 mb-0">Projects</h6>
@@ -325,7 +329,7 @@
                 <a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
                   <div class="navbar-profile">
                     <img class="img-xs rounded-circle" src="{% static 'assets/images/faces/face15.jpg' %}" alt="">
-                    <p class="mb-0 d-none d-sm-block navbar-profile-name">Henry Klein</p>
+                    <p class="mb-0 d-none d-sm-block navbar-profile-name"><br>	</p>
                     <i class="mdi mdi-menu-down d-none d-sm-block"></i>
                   </div>
                 </a>
@@ -388,6 +392,7 @@
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="{% static 'assets/vendors/js/vendor.bundle.base.js' %}"></script>
+
     <!-- endinject -->
     <!-- Plugin js for this page -->
     <script src="{% static 'assets/vendors/chart.js/Chart.min.js' %}"></script>
@@ -405,6 +410,29 @@
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="{% static 'assets/js/dashboard.js' %}"></script>
+    <script>
+      	function timeCount() {
+			var today = new Date();
+
+			var day = today.getDate();
+			var month = today.getMonth()+1;
+			var year = today.getFullYear();
+
+			var hour = today.getHours();
+			if(hour<10)hour = "0"+hour;
+
+			var minute = today.getMinutes();
+			if(minute<10)minute = "0"+minute;
+
+			var second = today.getSeconds();
+			if(second<10)second = "0"+second;
+
+			document.getElementById("clock").innerHTML = 
+			day+"-"+month+"-"+year+" | "+hour+":"+minute+"";
+
+			setTimeout("timeCount()", 1000);
+		}
+    </script>
     <!-- End custom js for this page -->
   </body>
 </html>
