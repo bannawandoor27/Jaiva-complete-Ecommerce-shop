@@ -1,6 +1,7 @@
 from .models import Product
 from .models import Wishlist,WishlistItem
 from .views import _wishlist_id
+from .models import ContactMessage
 
 def latest_products1(request):
   latest_products_1 = Product.objects.all().order_by('-created_date')[:3]
@@ -42,3 +43,7 @@ def wishlist_counter(request):
         except Wishlist.DoesNotExist:
             wishlist_count = 0
     return dict(wishlist_count=wishlist_count)
+
+def all_messages (request):
+  latest_messages = ContactMessage.objects.all()[:3]
+  return dict(all_messages=latest_messages)

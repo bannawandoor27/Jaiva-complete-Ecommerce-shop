@@ -92,5 +92,6 @@ class ContactMessage(models.Model):
   user_name = models.CharField(max_length=100)
   email = models.EmailField()
   message = models.TextField(default='hai jaiva ')
+  sent_time = models.DateTimeField(auto_now_add=True)
   def __str__(self):
     return self.user_name

@@ -89,7 +89,8 @@ TEMPLATES = [
                 'blog.context_processors.blog_data',
                 'carts.context_processors.counter',
                 'jaivashop.context_processors.wishlist_counter',
-                'carts.context_processors.total'
+                'carts.context_processors.total',
+                'jaivashop.context_processors.all_messages',
                 
             ],
         },

@@ -3,6 +3,7 @@ from carts.models import CartItem,Cart
 from carts.views import _cart_id
 from category.models import *
 from .models import *
+from django.contrib import messages, auth
 from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.db.models import Q
@@ -187,9 +188,24 @@ def remove_wishlist_item(request, product_id, wishlist_item_id):
     return redirect('wishlist')
 
 
-
+from .forms import *
 def contact_us(request):
-  if request.method == 'POST':
-    
-  return render(request,'contact.html')
+	if request.method == 'POST':
+		form = ContactForm(request.POST)
+		if form.is_valid:
+			user_name = request.POST['name']
+			email = request.POST['email']
+			message = request.POST['message']
+			user_message = ContactMessage.objects.create(
+				user_name=user_name,email=email,message=message
+			)
+			user_message.save()
+			messages.success(request,'Thank you for contacting Jaiva, We will reply your message soon!')
+			
+		else:
+			messages.error(request,'please fill the form correctly!')
+			
+	else:
+		form = ContactForm()
+	return render(request,'contact.html',{'form':form})
 
