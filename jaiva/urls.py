@@ -19,11 +19,13 @@ from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
 
+
 urlpatterns = [
     path('admin/', include('adminpanel.urls')),
     path('',include('jaivashop.urls')),
     path('customers/',include('accounts.urls')),
     path('cart/',include('carts.urls')),
     path('orders/',include('orders.urls')),
-    path('blog/',include('blog.urls'))
+    path('blog/',include('blog.urls')),
+    
 ]+ static(settings.MEDIA_URL, document_root= settings.MEDIA_ROOT)

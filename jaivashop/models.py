@@ -86,3 +86,11 @@ class WishlistItem(models.Model):
   cart_status = models.BooleanField(default=False)
   def __unicode__(self):
     return self.product
+
+
+class ContactMessage(models.Model):
+  user_name = models.CharField(max_length=100)
+  email = models.EmailField()
+  message = models.TextField(default='hai jaiva ')
+  def __str__(self):
+    return self.user_name

@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.db.models import Q
 from jaivashop.models import Category, Product, Sub_Category
 from django.core.exceptions import ObjectDoesNotExist
+from jaivashop.models import ContactMessage
 # Create your views here.
 def home(request):
   featured_categories = Sub_Category.objects.all().filter(is_featured=True)[:5]
@@ -184,4 +185,11 @@ def remove_wishlist_item(request, product_id, wishlist_item_id):
         pass
     
     return redirect('wishlist')
+
+
+
+def contact_us(request):
+  if request.method == 'POST':
+    
+  return render(request,'contact.html')
 

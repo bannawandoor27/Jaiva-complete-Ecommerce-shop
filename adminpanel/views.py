@@ -10,23 +10,45 @@ from datetime import datetime,date,timedelta
 from accounts.models import *
 from orders.models import *
 import calendar
+from django.views.decorators.cache import never_cache
+from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm, VariationForm
+@never_cache
 def admin_login(request):
-      if request.method == 'POST':
-        email = request.POST['email']
-        password = request.POST['password']
+  if 'email' in request.session:
+    return redirect('dashboard')
+    
+  if request.method == 'POST':
+    # form = LoginForm(request.POST)
+    email = request.POST['email']
+    password = request.POST['password']
+    
+    user = authenticate(email=email, password=password)
+    
+    if user is not None:
+      if user.is_superadmin:
+        request.session['email'] = email
+        
+        login(request, user)
+        return redirect('dashboard')
+        
+      else:
+        messages.error(request, 'You are not autherized to access admin panel')
+        return redirect('admin_login')
+    else:
+      messages.error(request, 'Invalid login credentials')
+      return redirect('admin_login')
+    
+  form = LoginForm
+  return render(request, 'admin_panel/admin_login.html', {'form':form})
+  
+@staff_member_required(login_url='admin_login')
+def admin_logout(request):
+    if 'email' in request.session:
+        request.session.flush()
+    auth.logout(request)
+    messages.success(request, "You are logged out.")
+    return redirect('admin_login')
 
-        user = authenticate(email=email, password=password)
-
-        if user is not None:
-            if user.is_superadmin:
-                login(request, user)
-                # messages.success(request,'You are logged in')
-                return redirect('admin_dashboard')
-        else:
-            messages.error(request, 'invalid credientail')
-            return redirect('admin_login')
-
-      return render(request, 'admin_panel/admin_login.html')
 
 def admin_dashboard(request):
     customers_count = Account.objects.filter(is_admin=False).count()
@@ -38,17 +60,25 @@ def admin_dashboard(request):
     this_year = today.year
     this_month = today.month
     label_list = []
-    data_list = []
+    line_data_list = []
+    bar_data_list =  []
     month_list = list(map(lambda x : calendar.month_name[x],range(1,this_month+1)))
     for year in range(2022,(this_year+1)):
         for month in range(1,(this_month+1)):
             month_wise_total_orders = Order.objects.filter(is_ordered=True,created_at__year = year,created_at__month=month,).order_by('created_at').count()
             month_name = calendar.month_abbr[month]
-            label_update = str(year)+ str(month_name)
+            label_update = str(month_name)+ ' ' + str(year)
             label_list.append(label_update)
-            data_list.append(month_wise_total_orders)
-           
-    print(label_list,data_list)
+            line_data_list.append(month_wise_total_orders)
+    for year in range(2022,(this_year+1)):
+        for month in range(1,(this_month+1)):
+            monthwise_orders = Order.objects.filter(is_ordered=True,created_at__year = year,created_at__month=month,)
+            monthwise_sales  = round(sum(list(map(lambda x : x.order_total,monthwise_orders))),2)
+            bar_data_list.append(monthwise_sales)
+
+
+
+     
     context = {
         'total_customers' : customers_count,
         'total_orders'    : orders_count,
@@ -56,17 +86,12 @@ def admin_dashboard(request):
         'total_sales'     : total_sales,
         'month_list'      : month_list,
         'line_labels'     : label_list,
-        'line_data'       : data_list,
+        'line_data'       : line_data_list,
+        'bar_data'        : bar_data_list
     }
     return render(request,'admin_panel/admin_dashboard.html',context)
 
-@staff_member_required(login_url='admin_login')
-def admin_logout(request):
-    if 'email' in request.session:
-        request.session.flush()
-    auth.logout(request)
-    messages.success(request, "You are logged out.")
-    return redirect('admin_login')
+
 
 def admin_dashboard_monthwise(request,month):
     today = datetime.today()

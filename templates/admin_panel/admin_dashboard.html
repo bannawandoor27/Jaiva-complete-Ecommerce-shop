@@ -6,7 +6,7 @@
         <h3 class="mb-4">Statisticts of {% if selected_month in request.path %}{{selected_month}} {% else %} All time {% endif %}</h3>
     </div>
         <div class="dropdown mx-5">
-            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% if '/{{selected_month}}/' in request.path %}{selected_month}}{% else %} Select month{% endif %}</button>
+            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{% if selected_month in request.path %} {{selected_month}} {% else %} Select month {% endif %}</button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton5">
             {% for month in month_list %}
             <a class="dropdown-item" href="{% url 'admin_dashboard_monthwise' month %}">{{month}}</a>
@@ -126,12 +126,12 @@
 
 
   <script>
-    
+
     var data = {
-        labels: {{line_labels}},
+        labels: {{line_labels|safe}},
         datasets: [{
-          label: 'Total of sales',
-          data: {{bar_data}},
+          label: 'Total sales of ₹',
+          data: {{bar_data|safe}},
           backgroundColor: [
             'rgba(54, 162, 235, 0.2)',
             'rgba(255, 99, 132, 0.2)',
@@ -192,10 +192,10 @@
 
  <script>
     var data = {
-    labels: {{line_labels}},
+    labels: {{line_labels|safe}},
     datasets: [{
-      label: '# Daily orders',
-      data: {{line_data}},
+      label: '#{% if selected_month in request.path %} Daily orders {% else %} Alltime orders {% endif %}',
+      data: {{line_data|safe}},
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
         'rgba(54, 162, 235, 0.2)',
@@ -223,10 +223,7 @@
         ticks: {
           beginAtZero: true
         },
-        scaleLabel: {
-          display: true,
-          labelString: 'Value'
-        }
+
       }]
     },
     legend: {
