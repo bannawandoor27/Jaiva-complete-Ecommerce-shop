@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{% static 'assets/images/favicon.png' %}" />
+ 
   </head>
   <body onload="timeCount();">
     <div class="container-scroller">
@@ -89,7 +90,7 @@
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
-              <span class="menu-title">Dashboard</span>
+              <span class="menu-title ">Dashboard</span>
             </a>
           </li>
           <li class="nav-item menu-items">
@@ -407,6 +408,8 @@
     <script src="{% static 'assets/js/misc.js' %}"></script>
     <script src="{% static 'assets/js/settings.js' %}"></script>
     <script src="{% static 'assets/js/todolist.js' %}"></script>
+    <!-- <script src="{% static 'assets/js/chart.js' %}"></script> -->
+
     <!-- endinject -->
     <!-- Custom js for this page -->
     <script src="{% static 'assets/js/dashboard.js' %}"></script>
@@ -433,6 +436,7 @@
 			setTimeout("timeCount()", 1000);
 		}
     </script>
+    
     <!-- End custom js for this page -->
   </body>
 </html>
