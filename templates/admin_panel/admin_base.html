@@ -86,7 +86,7 @@
             <span class="nav-link">Navigation</span>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="{% url 'admin_dashboard' %}">
               <span class="menu-icon">
                 <i class="mdi mdi-speedometer"></i>
               </span>
@@ -160,7 +160,7 @@
             </div>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="http://www.bootstrapdash.com/demo/corona-free/jquery/documentation/documentation.html">
+            <a class="nav-link" href="{% url 'admin_messages' %}">
               <span class="menu-icon">
                 <i class="mdi mdi-message-reply-text"></i>
               </span>
@@ -247,7 +247,7 @@
                   <h6 class="p-3 mb-0">Messages</h6>
                   {% for message in all_messages %}
                   <div class="dropdown-divider"></div>
-                  <a class="dropdown-item preview-item">
+                  <a class="dropdown-item preview-item" href="{% url 'admin_messages' %}">
                     <div class="preview-thumbnail">
                       <i class="mdi mdi-account"></i>
                     </div>

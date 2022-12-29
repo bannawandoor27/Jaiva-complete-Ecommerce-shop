@@ -3,7 +3,7 @@ from django.contrib import messages, auth
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import JsonResponse
+from jaivashop.models import ContactMessage
 # Create your views here.
 from django.contrib import messages
 from datetime import datetime,date,timedelta
@@ -12,6 +12,7 @@ from orders.models import *
 import calendar
 from django.views.decorators.cache import never_cache
 from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm, VariationForm
+from django.core.mail import EmailMessage
 @never_cache
 def admin_login(request):
   if 'email' in request.session:
@@ -134,5 +135,31 @@ def admin_dashboard_monthwise(request,month):
 
 
 def admin_messages(request):
-    return render(request,'admin_panel/admin_messages.html')
+    messages_recieved  = ContactMessage.objects.all().order_by('-sent_time')
+    context = {
+        'messages_recieved' : messages_recieved,
+    }
+    return render(request,'admin_panel/admin_messages.html',context)
+
+def delete_message(request,id):
+    message = ContactMessage.objects.get(id=id)
+    message.delete()
+    messages.error(request,'message deleted successfully!')
+    return redirect('admin_messages')
+
+def reply_message(request):
+    try:
+        if request.method == 'POST':
+            email = request.POST['email']
+            message = request.POST['message']
+            mail_subject = ''' Reply from Jaiva Ecommerce shop'''
+            send_mail = EmailMessage(mail_subject,message,to=[email])
+            send_mail.send()
+            messages.success(request,'Message sent successfully')
+        else:
+            messages.error(request,'please fill the form correctly')
+    except:
+        messages.error(request,'Server down! please ensure you are connected to internet')
+    return redirect('admin_messages')
+
 
