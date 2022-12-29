@@ -134,7 +134,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/icons/mdi.html">
+            <a class="nav-link" href="{% url 'admin_blog' %}">
               <span class="menu-icon">
                 <i class="mdi mdi-contacts"></i>
               </span>
@@ -352,10 +352,22 @@
           </div>
         </nav>
         <!-- partial -->
+        
         <div class="main-panel">
           <div class="content-wrapper" >
             <div class="">
-                
+              <div class="page-header ">
+                <h3 class="page-title"> Welcome, {{request.user.first_name|capfirst}}!</h3>
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}">
+                        {{request.path}}
+                      </a></li>
+                    <li class="breadcrumb-item active" aria-current="page"></li>
+                  </ol>
+                </nav>
+              </div>
+              {% include 'includes/alerts.html' %}
                 {% block content %}
                     
                 {% endblock content %}

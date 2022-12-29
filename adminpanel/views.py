@@ -50,7 +50,6 @@ def admin_logout(request):
     messages.success(request, "You are logged out.")
     return redirect('admin_login')
 
-
 def admin_dashboard(request):
     customers_count = Account.objects.filter(is_admin=False).count()
     orders_count = Order.objects.filter(is_ordered=True).count()
@@ -92,8 +91,6 @@ def admin_dashboard(request):
     }
     return render(request,'admin_panel/admin_dashboard.html',context)
 
-
-
 def admin_dashboard_monthwise(request,month):
     today = datetime.today()
     year = today.year
@@ -132,8 +129,6 @@ def admin_dashboard_monthwise(request,month):
     
     return render(request,'admin_panel/admin_dashboard.html',context)
 
-
-
 def admin_messages(request):
     messages_recieved  = ContactMessage.objects.all().order_by('-sent_time')
     context = {
@@ -162,4 +157,5 @@ def reply_message(request):
         messages.error(request,'Server down! please ensure you are connected to internet')
     return redirect('admin_messages')
 
-
+def admin_blog(request):
+    return render(request,'admin_panel/admin_blog.html')

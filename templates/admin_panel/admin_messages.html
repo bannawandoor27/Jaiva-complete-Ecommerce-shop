@@ -2,16 +2,6 @@
 {% load static %}
 
 {% block content %}
-{% include 'includes/alerts.html' %}
-<div class="page-header ">
-    <h3 class="page-title"> Welcome, Banna!</h3>
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Messages</a></li>
-        <li class="breadcrumb-item active" aria-current="page"></li>
-      </ol>
-    </nav>
-  </div>
   <div class="row">
     {% for message in messages_recieved %}
     <div class="col-md-6 grid-margin stretch-card">

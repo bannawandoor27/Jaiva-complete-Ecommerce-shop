@@ -2,6 +2,22 @@
 {% load static %}
 
 {% block content %}
-    
+{% include 'includes/alerts.html' %}
+<div class="row">
+    {% for blog in all_blogs %}
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">{{blog.heading}}</h4>
+            <p class="card-description"> {{blog.category}} </p>
+            <textarea class="form-control" id="exampleTextarea1" rows="8" style="color: #aab2bd;" >{{blog.description|truncatechars:530}} </textarea>
+            <div class="mt-3">
+            <a  class="btn btn-inverse-info mr-2">Edit</a>
+            <a class="btn btn-inverse-danger" href="{% url 'delete_blog' blog.id%}">Delete</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
 {% endblock content %}
     
