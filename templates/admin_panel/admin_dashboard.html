@@ -3,6 +3,21 @@
 
   
 {% block content %}
+<div class="main-panel">
+  <div class="content-wrapper" >
+    <div class="">
+      <div class="page-header ">
+        <h3 class="page-title"> Welcome, {{request.user.first_name|capfirst}}!</h3>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'admin_dashboard' %}">
+                {{request.path}}
+              </a></li>
+            <li class="breadcrumb-item active" aria-current="page"></li>
+          </ol>
+        </nav>
+      </div>
+      {% include 'includes/alerts.html' %}
 <div class="row">
     <div class="mx-3">
         <h3 class="mb-4">Statisticts of {% if selected_month in request.path %}{{selected_month}} {% else %} All time {% endif %}</h3>

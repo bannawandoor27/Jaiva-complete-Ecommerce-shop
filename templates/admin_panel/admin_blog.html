@@ -2,22 +2,54 @@
 {% load static %}
 
 {% block content %}
-{% include 'includes/alerts.html' %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h3 class="page-title"> Welcome, {{request.user.first_name|capfirst}}!</h3>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-ite"><a href="" class="btn btn-success">
+                 + Create New Blog
+                </a></li>
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
 <div class="row">
-    {% for blog in all_blogs %}
+    {% for blog in all_new_blogs %}
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
+            <img src="{{blog.image.url}}" alt="" style="height:10rem; width:30rem" class="mb-4">
             <h4 class="card-title">{{blog.heading}}</h4>
-            <p class="card-description"> {{blog.category}} </p>
+            <p class="card-description p-0">{{blog.time_ago}}</p>
+            <p> {{blog.category}} </p>
             <textarea class="form-control" id="exampleTextarea1" rows="8" style="color: #aab2bd;" >{{blog.description|truncatechars:530}} </textarea>
             <div class="mt-3">
             <a  class="btn btn-inverse-info mr-2">Edit</a>
-            <a class="btn btn-inverse-danger" href="{% url 'delete_blog' blog.id%}">Delete</a>
+            <a class="btn btn-inverse-danger" href="">Delete</a>
             </div>
           </div>
         </div>
       </div>
       {% endfor %}
+
+
+
+
+      <!-- Blog Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      ...
+    </div>
+  </div>
+</div>
+
+
+
 {% endblock content %}
     
