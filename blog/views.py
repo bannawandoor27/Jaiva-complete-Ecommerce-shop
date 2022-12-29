@@ -32,10 +32,9 @@ def all_blogs(request):
     except:
         article_list=[]
     
-    recent_blogs = Blog.objects.all().order_by('modified_date')[:6]
-    allblogs = Blog.objects.all()
+    allblogs = Blog.objects.all().order_by('-modified_date')
     context = {
-      'recent_blogs' : recent_blogs,
+      'recent_blogs' : allblogs[:6],
       'all_blogs'    : allblogs,
       'article_list' : article_list,
     }
@@ -44,7 +43,7 @@ def all_blogs(request):
 
 def blog_details(request,id):
     blog = Blog.objects.get(id=id)
-    recent_blogs = Blog.objects.all().order_by('modified_date')[:6]
+    recent_blogs = Blog.objects.all().order_by('-modified_date')[:6]
     context= {
         'blog':blog,
         'recent_blogs': recent_blogs

@@ -9,9 +9,7 @@
           <h3 class="page-title"> Welcome, {{request.user.first_name|capfirst}}!</h3>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-ite"><a href="" class="btn btn-success">
-                 + Create New Blog
-                </a></li>
+              <li class="breadcrumb-ite"><button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">+ Add New Blog</button></li>
               <li class="breadcrumb-item active" aria-current="page"></li>
             </ol>
           </nav>
@@ -22,34 +20,152 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
-            <img src="{{blog.image.url}}" alt="" style="height:10rem; width:30rem" class="mb-4">
+            {% if blog.image %}
+            <img src="{{blog.image.url}}" alt="" style="height:10rem; width:30rem" class="mb-4"> 
+            {% endif %}
             <h4 class="card-title">{{blog.heading}}</h4>
             <p class="card-description p-0">{{blog.time_ago}}</p>
             <p> {{blog.category}} </p>
-            <textarea class="form-control" id="exampleTextarea1" rows="8" style="color: #aab2bd;" >{{blog.description|truncatechars:530}} </textarea>
+            <textarea class="form-control" id="exampleTextarea1" rows="8" style="color: #aab2bd;" >{{blog.description|truncatechars:520}} </textarea>
             <div class="mt-3">
-            <a  class="btn btn-inverse-info mr-2">Edit</a>
-            <a class="btn btn-inverse-danger" href="">Delete</a>
+            <a  class="btn btn-inverse-info mr-2 editButton"  data-catid="{{blog.id}}" data-toggle="modal" data-target="#exampleModal2" >Edit</a>
+            <a data-toggle="modal" data-target="#ModalDelete" class="btn btn-inverse-danger">
+                Delete</a>
             </div>
           </div>
         </div>
       </div>
+          <!-- Modal Delete Confirmation-->
+    <div class="modal fade" id="ModalDelete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body text-left">
+                Are you sure to remove <b>{{blog.category|capfirst}} </b> post from Blogs?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <a href="{% url 'delete_blog' blog.id %}" type="button" class="btn btn-outline-danger">Yes</a>
+            </div>
+        </div>
+        </div>
+    </div>
+        <!-- Modal Edit Blog-->
+
+        <div class="modal fade " id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Edit Blog</h5>
+                  <button type="button" class="close " data-dismiss="modal" aria-label="Close" style="color: red;">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="{% url 'edit_blog' blog.id %}" method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="recipient-name" class="col-form-label" >Main Heading:</label>
+                      <input type="text" class="form-control" id="editBlogHeading"  name="heading" required value="">
+                      <label for="recipient-name" class="col-form-label" >Category:</label>
+                      <input type="text" class="form-control" id="editBlogCategory"  name="category" value="">
+                      <label for="file-upload" class="col-form-label" >Image:</label>
+                      <input type="file" class="form-control"  name="image"  value="">
+                    </div>
+                    <div class="form-group">
+                      <label for="message-text" class="col-form-label" >Description:</label>
+                      <textarea class="form-control"  required name="description" rows="17" placeholder="Blog content" id="editBlogDescription" ></textarea>
+                    </div>
+                    </div>
+                    <div class="modal-footer">
+                  <button type="submit" class="btn btn-outline-success">Save</button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
       {% endfor %}
 
 
 
 
-      <!-- Blog Modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Large modal</button>
-<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      ...
+  <!-- Modal Add Blog-->
+
+  <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add Blog</h5>
+          <button type="button" class="close " data-dismiss="modal" aria-label="Close" style="color: red;">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'add_blog' %}" method="POST" enctype='multipart/form-data'>
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="recipient-name" class="col-form-label">Main Heading:</label>
+              <input type="text" class="form-control" id="recipient-name"  name="heading" required placeholder="Blog heading">
+              <label for="recipient-name" class="col-form-label" >Category:</label>
+              <input type="text" class="form-control" id="recipient-name"  name="category" placeholder="Blog Category">
+              <label for="file-upload" class="col-form-label" >Image:</label>
+              <input type="file" class="form-control" id="recipient-name"  name="image" required>
+            </div>
+            <div class="form-group">
+              <label for="message-text" class="col-form-label" >Description:</label>
+              <textarea class="form-control" id="message-text" required name="description" rows="17" placeholder="Blog content"></textarea>
+            </div>
+            </div>
+            <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
 
+
+
+<!-- {% comment %}
+<script>
+    $('#exampleModal').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) 
+    var recipient = button.data('email')
+    var modal = $(this)
+    modal.find('.modal-title').text('New message to ' + recipient)
+    modal.find('.modal-body input').val(recipient)
+    })
+</script>
+{% endcomment %} -->
+    
+
+<script     src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js">
+</script>
+
+<script type="text/javascript">
+                $('.editButton').click(function(){
+                var blogId;
+               blogId = $(this).attr("data-catid");
+               let slug = blogId.toString();
+               console.log(blogId)
+                $.ajax(
+                {
+                    type:"GET",
+                    url: "/admin/edit_blog_single/"+ slug,
+                    success: function( response ) 
+                    {
+                       document.getElementById("editBlogHeading").value = response.post_heading
+                       document.getElementById("editBlogDescription").value = response.post_description
+                       document.getElementById("editBlogCategory").value = response.post_category
+                    }
+                })
+            });
+</script>
 
 {% endblock content %}
     

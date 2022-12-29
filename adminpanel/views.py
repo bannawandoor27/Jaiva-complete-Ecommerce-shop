@@ -10,9 +10,11 @@ from datetime import datetime,date,timedelta
 from accounts.models import *
 from orders.models import *
 import calendar
+from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
-from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm, VariationForm
+from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm, VariationForm,BlogForm
 from django.core.mail import EmailMessage
+from blog.models import Blog
 @never_cache
 def admin_login(request):
   if 'email' in request.session:
@@ -159,3 +161,46 @@ def reply_message(request):
 
 def admin_blog(request):
     return render(request,'admin_panel/admin_blog.html')
+
+def add_blog(request):
+    if request.method == 'POST':
+        heading = request.POST['heading']
+        category = request.POST['category']
+        image = request.FILES.get('image')
+        description = request.POST['description']
+        new_blog = Blog.objects.create(heading=heading,category=category,image=image,description=description)
+        new_blog.save()
+        messages.success(request,'Blog posted successfully!')
+        return redirect('admin_blog')
+    else:
+        return redirect('admin_blog')
+
+def delete_blog(request,id):
+    blog = Blog.objects.get(id=id)
+    blog.delete()
+    messages.success(request,'Post deleted successfully')
+    return redirect('admin_blog')
+
+def edit_blog(request,id):
+    post = Blog.objects.get(id=id)
+    if request.method == 'POST':
+        post.heading = request.POST.get('heading')
+        post.category = request.POST.get('category')
+        if request.FILES.get('image'):
+            post.image = request.FILES.get('image')
+        post.description = request.POST.get('description')
+        post.save()
+        messages.success(request,'Post edited successfully!')
+        return redirect('admin_blog')
+    else:
+        messages.error(request,'Some error occured!')
+        return redirect('admin_blog')
+
+def edit_blog_single(request,id):
+    post = Blog.objects.get(id=id)
+    context = dict(
+    post_heading = post.heading,
+    post_category = post.category,
+    post_description = post.description
+    )
+    return JsonResponse(context)
