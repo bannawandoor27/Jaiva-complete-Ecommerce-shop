@@ -162,7 +162,7 @@
           <li class="nav-item menu-items">
             <a class="nav-link" href="http://www.bootstrapdash.com/demo/corona-free/jquery/documentation/documentation.html">
               <span class="menu-icon">
-                <i class="mdi mdi-file-document-box"></i>
+                <i class="mdi mdi-message-reply-text"></i>
               </span>
               <span class="menu-title">Messages</span>
             </a>
@@ -249,17 +249,17 @@
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item preview-item">
                     <div class="preview-thumbnail">
-                      <img src="{% static 'assets/images/faces/face4.jpg' %}" alt="image" class="rounded-circle profile-pic">
+                      <i class="mdi mdi-account"></i>
                     </div>
                     <div class="preview-item-content">
-                      <p class="preview-subject ellipsis mb-1">{{message.user_name}} send you a message</p>
-                      <p class="text-muted mb-0"> 1 Minutes ago </p>
+                      <p class="preview-subject ellipsis mb-1">{{message.user_name|capfirst}} send you a message</p>
+                      <p class="text-muted mb-0"> {{message.time_ago}} </p>
                     </div>
                   </a>
                   {% endfor %}
 
                   <div class="dropdown-divider"></div>
-                  <p class="p-3 mb-0 text-center">4 new messages</p>
+                  <p class="p-3 mb-0 text-center">{{message_count}} new messages</p>
                 </div>
               </li>
               <li class="nav-item dropdown border-left">

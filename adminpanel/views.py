@@ -130,3 +130,9 @@ def admin_dashboard_monthwise(request,month):
     }
     
     return render(request,'admin_panel/admin_dashboard.html',context)
+
+
+
+def admin_messages(request):
+    return render(request,'admin_panel/admin_messages.html')
+

@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from category.models import Category, Sub_Category
 from accounts.models import Account
+from django.utils import timezone
+from timeago import format
 # Create your models here.
 
 class Product(models.Model):
@@ -93,5 +95,10 @@ class ContactMessage(models.Model):
   email = models.EmailField()
   message = models.TextField(default='hai jaiva ')
   sent_time = models.DateTimeField(auto_now_add=True)
+  def time_ago(self):
+    now = timezone.now()
+    time_diff = format(self.sent_time,now)
+    return time_diff
+
   def __str__(self):
     return self.user_name

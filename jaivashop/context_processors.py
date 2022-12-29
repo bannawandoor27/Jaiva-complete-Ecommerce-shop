@@ -45,5 +45,5 @@ def wishlist_counter(request):
     return dict(wishlist_count=wishlist_count)
 
 def all_messages (request):
-  latest_messages = ContactMessage.objects.all()[:3]
-  return dict(all_messages=latest_messages)
+  latest_messages = ContactMessage.objects.all().order_by('-sent_time')
+  return dict(all_messages=latest_messages[:4],message_count=latest_messages.count())
