@@ -3,6 +3,7 @@ from .models import *
 from newsapi import NewsApiClient
 from datetime import timedelta,date
 from django.conf import settings
+from django.core.paginator import Paginator
 # Create your views here.
 try:
     
@@ -33,9 +34,13 @@ def all_blogs(request):
         article_list=[]
     
     allblogs = Blog.objects.all().order_by('-modified_date')
+    paginator = Paginator(allblogs, 4)
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
+
     context = {
       'recent_blogs' : allblogs[:6],
-      'all_blogs'    : allblogs,
+      'all_blogs'    : page_object,
       'article_list' : article_list,
     }
     
