@@ -49,14 +49,24 @@
                     <div class="blog__sidebar">
                         <div class="blog__sidebar__item">
                             <h4>Recent News</h4>
-                            
-                            
-                                
-                            
-                                
                             <div class="blog__sidebar__recent">
+                                {% for article_dict in article_list   %}
 
+                                <a href="{{article_dict.url}}" class="blog__sidebar__recent__item">
+                                    <div class="blog__sidebar__recent__item__pic">
+                                        <img src="{{article_dict.urlToImage}}" alt="" style="height: 6rem; width: 6rem;">
+                                    </div>
+                                    <div class="blog__sidebar__recent__item__text">
+                                        <h6>{{article_dict.title}}</h6>
+                                        <span>Published at {{article_dict.publishedAt }}</span>
+                                    </div>
+                                </a>
+
+                                {% endfor %}
                             </div>
+                            
+
+                            
                         </div>
                         <div class="blog__sidebar__item">
                         </div>
@@ -65,7 +75,7 @@
                 <div class="col-lg-8 col-md-7 order-md-1 order-1">
                     <div class="blog__details__text">
                 
-                        <img src="{{blog.image.url}}" alt="">
+                        <img src="{{blog.image.url}}" alt="" style="width: 100%;">
                         <p>{{blog.description}}</p>
                         <h3>{{blog.heading}}</h3>
                         <p>{{blog.description}}</p>

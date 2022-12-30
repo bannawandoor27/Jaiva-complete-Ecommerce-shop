@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 import requests
-
+from django.core.paginator import Paginator
 
 from carts.models import Cart, CartItem
 from carts.views import _cart_id
@@ -289,6 +289,7 @@ def reset_password(request):
 @login_required
 def user_dashboard(request):
     order_count = Order.objects.filter(user=request.user,is_ordered=True).count()
+    
     print(order_count)
     context = {
         'order_count': order_count
@@ -325,8 +326,13 @@ def change_password(request):
 @login_required(login_url='login')
 def my_orders(request):
     all_orders = Order.objects.filter(user=request.user,is_ordered=True).order_by('-created_at')
+    
+    paginator = Paginator(all_orders, 6)
+    page_number = request.GET.get('page')
+    page_object = paginator.get_page(page_number)
+
     context = {
-        'all_orders': all_orders
+        'all_orders': page_object
 
     }
     print(all_orders.count())

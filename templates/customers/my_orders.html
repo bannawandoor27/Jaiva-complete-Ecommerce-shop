@@ -71,6 +71,19 @@
 
 
 			</div> <!-- row.// -->
+            <div class="product__pagination ">
+                {% if all_orders.has_previous %}
+                  <a href="?page={{ all_orders.previous_page_number }}"><i class="fa fa-angle-double-left"></i></a>
+                {% endif %}
+                  <a href="?page={{ all_orders.number }}">{{ all_orders.number }}</a>
+                {% if all_orders.has_next %}
+                  <a href="?page={{ all_orders.next_page_number }}">{{ all_orders.next_page_number }}</a>
+                {%endif%}
+      
+                {% if all_orders.has_next %}
+                  <a href="?page={{ all_orders.next_page_number }}"><i class="fa fa-angle-double-right"></i></a>
+                {%endif%}
+              </div>
 		</div> <!-- card-body .// -->
 
 		</article> <!-- order-group.// -->

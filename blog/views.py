@@ -42,10 +42,21 @@ def all_blogs(request):
     return render(request,'blog/blog.html',context)
 
 def blog_details(request,id):
+    try:
+        if all_articles:
+            article_list = all_articles['articles'][:15]
+            for article in article_list:
+                time =str(article['publishedAt'][:10]) 
+                article['publishedAt'] = time
+        else:
+            article_list = []
+    except:
+        article_list=[]
     blog = Blog.objects.get(id=id)
-    recent_blogs = Blog.objects.all().order_by('-modified_date')[:6]
+    recent_blogs = Blog.objects.all().order_by('-modified_date')
     context= {
-        'blog':blog,
-        'recent_blogs': recent_blogs
+        'blog': blog,
+        'recent_blogs': recent_blogs[:6],
+        'article_list' : article_list,
     }
     return render(request,'blog/blog_details.html',context)
