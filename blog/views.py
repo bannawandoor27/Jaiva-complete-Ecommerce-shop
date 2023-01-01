@@ -18,7 +18,7 @@ try:
                                       language='en',
                                       sort_by='relevancy',
                                       page=1)
-    print(1)                                  
+
 except:
     pass
 def all_blogs(request):

@@ -56,7 +56,8 @@ def admin_dashboard(request):
     customers_count = Account.objects.filter(is_admin=False).count()
     orders_count = Order.objects.filter(is_ordered=True).count()
     product_count = Product.objects.filter(is_available=True).count()
-    total_orders = Order.objects.filter(is_ordered=True)
+    total_orders = Order.objects.filter(is_ordered=True).order_by('created_at')
+    first_order_date = total_orders[0].created_at.date()
     total_sales = round(sum(list(map(lambda x : x.order_total,total_orders))),2)
     today = datetime.today()
     this_year = today.year
@@ -64,8 +65,12 @@ def admin_dashboard(request):
     label_list = []
     line_data_list = []
     bar_data_list =  []
-    month_list = list(map(lambda x : calendar.month_name[x],range(1,this_month+1)))
+    month_list=[]
+    for year in range(first_order_date.year,this_year+1) :
+        month = this_month if year==this_year else 12
+        month_list= month_list+(list(map(lambda x : calendar.month_abbr[x]+'-'+str(year),range(1,month+1))))[::-1]
     for year in range(2022,(this_year+1)):
+        this_month = this_month if year==this_year else 12
         for month in range(1,(this_month+1)):
             month_wise_total_orders = Order.objects.filter(is_ordered=True,created_at__year = year,created_at__month=month,).order_by('created_at').count()
             month_name = calendar.month_abbr[month]
@@ -94,26 +99,35 @@ def admin_dashboard(request):
     return render(request,'admin_panel/admin_dashboard.html',context)
 
 def admin_dashboard_monthwise(request,month):
+    total_orders = Order.objects.filter(is_ordered=True).order_by('created_at')
+    first_order_date = total_orders[0].created_at.date()
+    taken_month = month
+    selected_month = taken_month[:3]
+    selected_year = taken_month[4:9]
     today = datetime.today()
-    year = today.year
-    day = today.day
-    selected_month = month
-    month = datetime.strptime(month, '%B').month
-    customers_count = Account.objects.filter(is_admin=False,date_jointed__year= year,date_jointed__month=month).count()
-    orders_count = Order.objects.filter(is_ordered=True,created_at__year = year,created_at__month=month,).count()
-    product_count = Product.objects.filter(is_available=True,created_date__year=year,created_date__month=month).count()
-    total_orders = Order.objects.filter(is_ordered=True,created_at__year = year,created_at__month=month,).order_by('created_at')
+    
+    day = today.day if selected_year==today.year else 31
+    month = datetime.strptime(selected_month, '%b').month
+    customers_count = Account.objects.filter(is_admin=False,date_jointed__year= selected_year,date_jointed__month=month).count()
+    orders_count = Order.objects.filter(is_ordered=True,created_at__year = selected_year,created_at__month=month,).count()
+    product_count = Product.objects.filter(is_available=True,created_date__year=selected_year,created_date__month=month).count()
+    total_orders = Order.objects.filter(is_ordered=True,created_at__year = selected_year,created_at__month=month,).order_by('created_at')
+    
     total_sales = round(sum(list(map(lambda x : x.order_total,total_orders))),2)
-    month_list = list(map(lambda x : calendar.month_name[x],range(1,today.month+1)))
+    month_list=[]
+    for year in range(first_order_date.year,today.year+1) :
+        month = today.month if year==today.year else 12
+        month_list= month_list+(list(map(lambda x : calendar.month_abbr[x]+'-'+str(year),range(1,month+1))))[::-1]
     # x= total_orders[0].created_at.date().day
     order_count_per_day = []
+    selected_month_num = datetime.strptime(selected_month, '%b').month
     for day in range (1,(day+1)):
-        day_order = Order.objects.filter(is_ordered=True,created_at__year = year,created_at__month=month, created_at__day=day).count()
+        day_order = Order.objects.filter(is_ordered=True,created_at__year = selected_year,created_at__month=selected_month_num, created_at__day=day).count()
         order_count_per_day.append(day_order)
     days = list(range(1,day+1))
     sales_per_day =[]
     for day in range (1,(day+1)):
-        day_order = Order.objects.filter(is_ordered=True,created_at__year = year,created_at__month=month, created_at__day=day)
+        day_order = Order.objects.filter(is_ordered=True,created_at__year = selected_year,created_at__month=selected_month_num, created_at__day=day)
         day_sales = sum(list(map(lambda x : x.order_total,day_order)))
         sales_per_day.append(day_sales)
 
@@ -123,10 +137,10 @@ def admin_dashboard_monthwise(request,month):
         'total_products'  : product_count,
         'total_sales'     : total_sales,
         'month_list'      : month_list,
-        'selected_month'  : selected_month,
+        'selected_month'  : taken_month,
         'line_labels'     : days,
         'line_data'       : order_count_per_day,
-        'bar_data'        : sales_per_day
+        'bar_data'        : sales_per_day,
     }
     
     return render(request,'admin_panel/admin_dashboard.html',context)
