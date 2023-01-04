@@ -1,0 +1,52 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 4rem;"></h2>
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+
+<div class="container mt-3" st>
+  <h2 class="text-center text-white">Edit Category</h2>
+  <form action="{% url 'admin_edit_category' category.slug %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="col-md-12 form-group">
+        <label > Category Name</label><br>
+        {{form.category_name}}  
+    </div>
+    <div class="col form-group">
+        <label > Slug</label><br>
+        {{form.slug}}  
+    </div>
+    <div class="col-md-12 form-group">
+        <label > Description</label><br>
+        {{form.description}}  
+    </div>
+    <div class="col-md-12 form-group">
+        <label class=""> Image
+        {{form.category_image}}
+    </label><br>  
+    </div>
+                     
+    <div class="col form-group">
+       <input type="submit" name="submit" id="submit" class="btn btn-warning" value="Save"/>
+  </form>
+</div>
+</div>
+</div>
+</div>
+
+{% endblock content %}
+    

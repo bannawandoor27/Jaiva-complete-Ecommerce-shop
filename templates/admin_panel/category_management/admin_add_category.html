@@ -1,0 +1,51 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 4rem;">Categories</h2>
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+<div class="container mt-3" style="min-height: 33rem;">
+    <h2 class="text-center text-white">Add Category</h2>
+    <form action="{% url 'admin_add_category' %}" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+  
+      <div class="col form-group">
+          <label > Category Name</label><br>
+          {{form.category_name}}  
+      </div>
+      <div class="col form-group">
+          <label > Slug</label><br>
+          {{form.slug}}  
+      </div>
+      <div class="col form-group">
+          <label > Description</label><br>
+          {{form.description}}  
+      </div>
+      <div class="col form-group">
+          <label > Image</label><br>
+          {{form.category_image}}
+          <div id="image-box" class="image-container"></div>
+
+      </div>
+      <div class="col form-group">
+         <a href=""> <input type="submit" name="submit" id="submit" class="btn btn-warning" value="Save"/></a>
+      </div>
+    </form>
+  </div>
+  </div>
+  </div>
+  
+{% endblock content %}
+    

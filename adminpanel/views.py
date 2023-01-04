@@ -313,8 +313,8 @@ def admin_add_category(request):
     return render(request, 'admin_panel/category_management/admin_add_category.html', context)
   
 @staff_member_required(login_url = 'admin_login')
-def admin_edit_category(request, slug):
-  category = Category.objects.get(slug=slug)
+def admin_edit_category(request, category_slug):
+  category = Category.objects.get(slug=category_slug)
   
   if request.method == 'POST':
     form = CategoryForm(request.POST, request.FILES, instance=category)
@@ -325,7 +325,7 @@ def admin_edit_category(request, slug):
       return redirect('admin_categories')
     else:
       messages.error(request, 'Invalid input')
-      return redirect('admin_edit_category', slug)
+      return redirect('admin_edit_category', category_slug)
       
   form =   CategoryForm(instance=category)
   context = {
@@ -335,8 +335,8 @@ def admin_edit_category(request, slug):
   return render(request, 'admin_panel/category_management/admin_edit_category.html', context)
   
 @staff_member_required(login_url = 'admin_login')  
-def admin_delete_category(request, slug):
-  category = Category.objects.get(slug=slug)
+def admin_delete_category(request, category_slug):
+  category = Category.objects.get(slug=category_slug)
   category.delete()
   messages.success(request, 'Category deleted successfully.')
   return redirect('admin_categories')

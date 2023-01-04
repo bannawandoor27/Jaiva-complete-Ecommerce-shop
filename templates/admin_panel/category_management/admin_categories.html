@@ -2,106 +2,105 @@
 {% load static %}
 
 {% block content %}
-<div class="text-center mx-auto mt-2"  style="min-width: 22rem;">{% include 'includes/alerts.html' %}</div>
-
-<div class="container mt-3" style="min-height: 33rem;">
-  <h2 class="text-center text-white">Categories</h2>
-  <div class="d-flex justify-content-between">
-    <input class="form-control w-50 mx-auto mb-3" type="search" placeholder="Search" aria-label="Search" id="myInput">
-    <div><a href="{% url 'admin_add_category' %}"><button class="btn btn-warning btn-sm mt-1"><i class="fas fa-plus mr-2"></i>Add Category</button></a></div>
-  </div>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th scope="col">Category Name</th>
-        <th>Description</th>
-        <th>Sub Categories</th>
-        <th>Edit</th>
-        <th>Delete</th>
-      </tr>
-    </thead>
-    <tbody id="myTable">
-      
-      {% for category in categories %}
-
-      <tr style="height: 50px !important;" class="text-wrap">
-        <th scope="row">{{category.category_name}}</th>
-        <td>{{category.description}}</td>
-        <td><a href=""><button class="btn btn-info btn-sm ml-3"><i class="fas fa-list"></i></button></a></td>
-        <td>
-          <div><a href="{% url 'admin_edit_category' category.slug %}" ><i class="fas fa-edit text-warning ml-2"></i></a>
-          </div> 
-        </td>
-        <td>
-          <div class=""><a href="" data-toggle="modal" data-target="#modal{{category.id}}">
-            <i class="fas fa-trash-alt text-danger ml-2"></i></a>
-          </div> 
-        </td>
-      </tr>
-
-      <div class="modal fade" id="modal{{category.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Delete Product?</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body text-left">
-              Are you sure to delete <b>{{category.category_name}}?</b>?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-              <a href="{% url 'admin_delete_category' category.slug %}"  type="button" class="btn btn-primary">Yes</a>
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 4rem;">Categories</h2>
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-ite"><a href="{% url 'admin_add_category' %}" class="btn btn-success">+ Add Category</a></li>
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+        
+<div class="container mt-3" >
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">Category Name</th>
+          <th>Description</th>
+          <th>Sub Categories</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody id="myTable">
+        
+        {% for category in categories %}
+        <tr class="text-wrap">
+          <th scope="row">{{category.category_name|capfirst}}</th>
+          <td>{{category.description|truncatechars:100}}</td>
+          <td><a href=""><button class="btn btn-info btn-sm ml-3"><i class="mdi mdi-format-list-bulleted"></i></button></a></td>
+          <td>
+            <div><a href="{% url 'admin_edit_category' category.slug %}" ><i class="mdi mdi-tooltip-edit"></i></a>
+            </div> 
+          </td>
+          <td>
+            <div class=""><a href="" data-toggle="modal" data-target="#modal{{category.id}}">
+              <i class="mdi mdi-delete-forever text-danger h-50"></i></a>
+            </div> 
+          </td>
+        </tr>
+  
+        <div class="modal fade" id="modal{{category.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Delete Product?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body text-left">
+                Are you sure to delete <b>{{category.category_name}}?</b>?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a href="{% url 'admin_delete_category' category.slug %}"  type="button" class="btn btn-primary">Yes</a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-        
-      {% endfor %}
-        
-    </tbody>
-  </table>
-
-  <nav aria-label="Page navigation example" class="mt-3">
-    <ul class="pagination d-flex justify-content-center">
-      {% if categories.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ categories.previous_page_number }}" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-          <span class="sr-only">Previous</span>
-        </a>
-      </li>
-      {% endif %}
-      <li class="page-item"><a class="page-link" href="?page={{ categories.number }}">{{ categories.number }}</a></li>
-      {% if categories.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ categories.next_page_number }}">{{ categories.next_page_number }}</a></li>
-      {%endif%}
+          
+        {% endfor %}
+          
+      </tbody>
+    </table>
   
-      {% if categories.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ categories.next_page_number }}" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-          <span class="sr-only">Next</span>
-        </a>
-      </li>
-      {%endif%}
-    </ul>
-  </nav>
-
-</div>
-
-<script>
-  $(document).ready(function(){
-    $("#myInput").on("keyup", function() {
-      var value = $(this).val().toLowerCase();
-      $("#myTable tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-      });
-    });
-  });
-</script>
+    <nav aria-label="Page navigation example" class="mt-3">
+      <ul class="pagination d-flex justify-content-center">
+        {% if categories.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ categories.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        {% endif %}
+        <li class="page-item"><a class="page-link" href="?page={{ categories.number }}">{{ categories.number }}</a></li>
+        {% if categories.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ categories.next_page_number }}">{{ categories.next_page_number }}</a></li>
+        {%endif%}
+    
+        {% if categories.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ categories.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+        {%endif%}
+      </ul>
+    </nav>
   
+  </div>
+  </div>
+  </div>
+  </div>
+
 {% endblock content %}
     
