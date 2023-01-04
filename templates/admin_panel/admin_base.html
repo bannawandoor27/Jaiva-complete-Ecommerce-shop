@@ -104,7 +104,7 @@
             <div class="collapse" id="ui-basic">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="{% url 'admin_categories' %}">Categories</a></li>
-                <li class="nav-item"> <a class="nav-link" href="{% url 'category_offers' %}">Category Offers</a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'category_offers' %}">Offers</a></li>
               </ul>
             </div>
           </li>
@@ -119,20 +119,9 @@
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="{% url 'admin_products' %}"> Products</a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-404.html"> 404 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/error-500.html"> 500 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
+                <li class="nav-item"> <a class="nav-link" href="{% url 'admin_product_offers' %}"> Offers </a></li>
               </ul>
             </div>
-          </li>
-          <li class="nav-item menu-items">
-            <a class="nav-link" href="">
-              <span class="menu-icon">
-                <i class="mdi mdi-playlist-play"></i>
-              </span>
-              <span class="menu-title">Products</span>
-            </a>
           </li>
           <li class="nav-item menu-items">
             <a class="nav-link" href="{% url 'admin_user_management' %}">
@@ -143,7 +132,7 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="pages/charts/chartjs.html">
+            <a class="nav-link" href="{% url 'admin_orders' %}">
               <span class="menu-icon">
                 <i class="mdi mdi-chart-bar"></i>
               </span>

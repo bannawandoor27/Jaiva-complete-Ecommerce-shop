@@ -1,0 +1,92 @@
+                  <!-- Modal for Add offer -->
+                  <div class="modal fade" id="addOffer{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="ModalCenterTitle">Add Product Offer</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                  
+                  
+                  
+                            <form action="{% url 'add_product_offer' %}" class="forms-sample" method="POST">
+                              {% csrf_token %}
+                              <div class="form-group">
+                                <label for="exampleInputUsername1" class="text-dark">Product  Name</label>
+                                <input type="text" class="form-control" id="exampleInputUsername1" name="product_name" value="{{product.product_name}}" readonly>
+                              </div>
+                              <div class="form-group">
+                                <label for="exampleInputUsername1" class="text-dark">Offer In % :</label>
+                                <input type="number" class="form-control w-25" id="exampleInputUsername1" name="product_offer" value="{{product.product_offer}}" min="0" max="70" required="True">
+                              </div>
+                            
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Add</button>
+                            </form>
+                          </div>       
+                        </div>
+                    </div>
+                  </div>
+            
+                        <!-- Modal for Edit offer -->
+                  <div class="modal fade" id="editOffer{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="ModalCenterTitle">Edit Product Offer</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                  
+                  
+                  
+                            <form action="{% url 'add_product_offer' %}" class="forms-sample" method="POST">
+                              {% csrf_token %}
+                              <div class="form-group">
+                                <label for="exampleInputUsername1" class="text-dark">Product  Name</label>
+                                <input type="text" class="form-control" id="exampleInputUsername1" name="product_name" value="{{product.product_name}}" readonly>
+                              </div>
+                              <div class="form-group">
+                                <label for="exampleInputUsername1" class="text-dark">Offer In % :</label>
+                                <input type="number" class="form-control w-25" id="exampleInputUsername1" name="product_offer" value="{{product.product_offer}}" min="0" max="70" required="True">
+                              </div>
+                            
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Edit</button>
+                            </form>
+                          </div>       
+                        </div>
+                    </div>
+                  </div>
+            
+                  <!-- Modal for Delete offer -->
+                  <div class="modal fade" id="deleteOffer{{product.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="ModalCenterTitle">Delete Product Offer</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Are you sure to detete offer for <b>{{product.product_name}}</b>               
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                            <a href="{% url 'delete_product_offer' product.id %}">
+                              <button type="submit" class="btn btn-primary">Yes</button>
+                            </a>
+                          </div>       
+                        </div>
+                    </div>
+                  </div>

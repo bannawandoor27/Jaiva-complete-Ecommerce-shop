@@ -1,0 +1,99 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 1rem;">Orders</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+        <div class="container" >
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Number</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Amount</th>
+                    <th>Payment Mode</th>
+                    <th>Tracking id</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="myTable">
+                  
+                  {% for order in orders %}
+            
+                  <tr style="height: 50px !important;" class="text-wrap">
+                    <th scope="row">
+                      <a href="" class="text-white">{{order.id}}</a></th>
+                    <td>{{order.full_name}}</td>
+                    <td>{{order.email}}</td>
+                    <td>₹{{order.order_total}}</td>
+                    <td>{{order.payment.payment_method}}</td>
+                    <td>{{order.order_number}}</td>
+                    <td>{{order.status}}</td>
+                    <td>
+                      {% if order.status == 'Delivered' %}
+                      <label class="badge badge-success">Delivered</label>
+                      {% elif order.status == 'Cancelled' %}
+                      <label class="badge badge-danger">Cancelled</label>
+                      {% elif order.status == 'Returned' %}
+                      <label class="badge badge-warning">Returned</label>
+                      {%else%}
+                      <label class="badge badge-info" type="button"  data-toggle="modal" data-target="#myModal{{order.id}}" id="Modal_button">Change</button>
+                      {%endif%}
+                    </td>
+                    <td>
+                      {% if order.status == 'Order Confirmed' %}
+                      <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#cancel{{order.id}}">
+                        Cancel
+                      </button>
+                      {% endif %}
+                    </td>
+                </tr>   
+                    {% include 'includes/order_modal.html' %}
+                  {% endfor %}
+                    
+                </tbody>
+              </table>
+            </div>
+            
+            <nav aria-label="Page navigation example" class="mt-3">
+              <ul class="pagination d-flex justify-content-center">
+                {% if orders.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ orders.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="?page={{ orders.number }}">{{ orders.number }}</a></li>
+                {% if orders.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ orders.next_page_number }}">{{ orders.next_page_number }}</a></li>
+                {%endif%}
+            
+                {% if orders.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ orders.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+                {%endif%}
+              </ul>
+            </nav>
+            </div>
+            
+        </div>
+    {% endblock content %}

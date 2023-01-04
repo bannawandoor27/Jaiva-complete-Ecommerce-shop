@@ -16,6 +16,20 @@
         </div>
         {% include 'includes/alerts.html' %}
         <div class="container">
+            <form action="{% url 'admin_products' %}" id="searchForm" method="POST">
+                {% csrf_token %}
+                <div class="d-flex justify-content-center">
+            <input class="form-control w-50  mb-5 d-inline-block" type="search" placeholder="Search" aria-label="Search" name="search" >
+            <button class="mdi mdi-yeast mb-5 " style="border-radius: 0.3rem;" type="submit"></button>
+                </div>
+            </form>
+            
+            {% if not products %}
+                 
+            <h3> No products of this name!</h3>
+            
+            {% else %}
+                 
             <table class="table table-hover">
               <thead>
                 <tr>
@@ -31,7 +45,7 @@
                   <th>Delete</th>
                 </tr>
               </thead>
-              <tbody id="myTable">
+              <tbody >
                 
                 {% for product in products %}
           
@@ -110,10 +124,9 @@
                 {%endif%}
               </ul>
             </nav>
-          
+            {% endif %}
           </div>
-        </div>
-        </div>
+        
     </div>
 </div>
 

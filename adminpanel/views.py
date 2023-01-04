@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from django.contrib import messages, auth
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
@@ -445,12 +445,15 @@ def delete_subcategory(request, slug):
 def admin_products(request):
   if request.method == 'POST':
     search_key = request.POST.get('search')
-    products = Product.objects.filter(Q(product_name__icontains=search_key) | Q(category__icontains=search_key) | Q(sub_category__icontains=search_key))
+    products = Product.objects.filter(Q(product_name__icontains=search_key))
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
   else:
     products = Product.objects.all().order_by('-id')
-  paginator = Paginator(products, 10)
-  page_number = request.GET.get('page')
-  page_obj = paginator.get_page(page_number)
+    paginator = Paginator(products, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
   
   context = {
     'products': page_obj
@@ -534,5 +537,32 @@ def delete_product_offer(request, id):
   messages.success(request, 'Product offer deleted successfully')
   return redirect('admin_product_offers')
 
+@staff_member_required(login_url = 'admin_login')
+def admin_orders(request):
+  orders = Order.objects.filter(is_ordered=True).order_by('id')
+  paginator = Paginator(orders, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'orders':page_obj,
+  }
+  return render(request, 'admin_panel/order_management/admin_orders.html', context)
 
+@staff_member_required(login_url = 'admin_login')
+def admin_change_order(request, id):
+  if request.method == 'POST':
+    order = get_object_or_404(Order, id=id)
+    status = request.POST.get('status')
+    order.status = status 
+    order.save()
+    if status  == "Delivered":
+      try:
+          payment = Payment.objects.get(payment_id = order.order_number, status = False)
+          if payment.payment_method == 'Cash On Delivery':
+              payment.status = True
+              payment.save()
+      except:
+          pass
+  return redirect('admin_orders')
 

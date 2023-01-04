@@ -2,6 +2,87 @@
 {% load static %}
 
 {% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 3rem;">Product Offers</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-ite"><a href="{% url 'add_product_offer' %}" class="btn btn-success">+ Add Product Offer</a></li>
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+        <div class="container">
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Product Name</th>
+                    <th>Modified at</th>
+                    <th>Offer %</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="myTable">
+                  
+                  {% for product in products %}
+            
+                  <tr style="height: 50px !important;" class="text-wrap">
+                    <th scope="row">{{product.product_name}}</th>
+                    <td>{{product.modified_date|date}}</td>
+                    <td>
+                      {% if product.product_offer > 0 %}
+                      {{product.product_offer}}%
+                      {% else %}
+                      No Offer
+                      {% endif %}
+                    </td>
+                    <td>
+                      {% if product.product_offer > 0 %}
+                        <button class="btn text-warning" data-toggle="modal" data-target="#editOffer{{product.id}}" ><i class="mdi mdi-table-edit"></i></button>
+                                  
+                        <button class="btn text-danger" data-toggle="modal" data-target="#deleteOffer{{product.id}}" ><i class="mdi mdi-delete"></i></button>
+                      {% else %}
+                      <button class="btn text-success" data-toggle="modal" data-target="#addOffer{{product.id}}" > <i class="mdi mdi-plus-circle"></i></button>
+                      {% endif %}
+                    </td>
+                  </tr>
+                        {% include 'includes/product_modals.html' %}     
+                  {% endfor %}
+                    
+                </tbody>
+              </table>
+            </div>
+            
+            <nav aria-label="Page navigation example" class="mt-3">
+              <ul class="pagination d-flex justify-content-center">
+                {% if products.has_previous %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ products.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                  </a>
+                </li>
+                {% endif %}
+                <li class="page-item"><a class="page-link" href="?page={{ products.number }}">{{ products.number }}</a></li>
+                {% if products.has_next %}
+                <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">{{ products.next_page_number }}</a></li>
+                {%endif%}
+            
+                {% if products.has_next %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ products.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                  </a>
+                </li>
+                {%endif%}
+              </ul>
+            </nav>
 
-
+        </div>
+    </div>
+    
 {% endblock content %}
