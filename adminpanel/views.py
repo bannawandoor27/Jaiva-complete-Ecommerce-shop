@@ -375,67 +375,67 @@ def delete_category_offer(request, id):
   return redirect('category_offers')
 
 
-# # sub category management
+# sub category management
 
-# @staff_member_required(login_url = 'admin_login')
-# def subcategories(request, category_slug):
-#   sub_categories = Sub_Category.objects.all().filter(category__slug=category_slug)
-#   context = {
-#     'sub_categories':sub_categories,
-#     'category_slug':category_slug,
-#   }
-#   return render(request, 'admin_panel/category_management/admin_sub_categories.html', context)
+@staff_member_required(login_url = 'admin_login')
+def subcategories(request, category_slug):
+  sub_categories = Sub_Category.objects.all().filter(category__slug=category_slug)
+  context = {
+    'sub_categories':sub_categories,
+    'category_slug':category_slug,
+  }
+  return render(request, 'admin_panel/category_management/admin_subcategories.html', context)
 
-# @staff_member_required(login_url = 'admin_login')
-# def add_subcategory(request, category_slug):
-#   category = Category.objects.get(slug=category_slug)
-#   if request.method == 'POST':
-#     form = SubCategoryForm(request.POST, request.FILES)
-#     if form.is_valid():
-#       form.save()
-#       messages.success(request, 'Sub Category added successfully.')
-#       return redirect('subCategories', category_slug)
-#     else:
-#       messages.error(request, 'Invalid input!!!')
-#       return redirect('addSubCategory', category_slug)
-#   else:
-#     form = SubCategoryForm()
-#     context = {
-#       'form':form,
-#       'category':category
-#     }
-#     return render(request, 'admin_panel/category_management/add_subcategory.html', context)
+@staff_member_required(login_url = 'admin_login')
+def add_subcategory(request, category_slug):
+  category = Category.objects.get(slug=category_slug)
+  if request.method == 'POST':
+    form = SubCategoryForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Subcategory added successfully.')
+      return redirect('admin_subcategories', category_slug)
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('admin_add_subcategory', category_slug)
+  else:
+    form = SubCategoryForm()
+    context = {
+      'form':form,
+      'category':category
+    }
+    return render(request, 'admin_panel/category_management/add_subcategory.html', context)
   
-# @staff_member_required(login_url = 'admin_login')
-# def edit_subcategory(request, slug):
-#   subCategory = Sub_Category.objects.get(slug=slug)
-#   cat_slug = subCategory.category.slug
+@staff_member_required(login_url = 'admin_login')
+def edit_subcategory(request, slug):
+  sub_category = Sub_Category.objects.get(slug=slug)
+  cat_slug = sub_category.category.slug
   
-#   if request.method == 'POST':
-#     form = SubCategoryForm(request.POST, request.FILES, instance=subCategory)
+  if request.method == 'POST':
+    form = SubCategoryForm(request.POST, request.FILES, instance=sub_category)
     
-#     if form.is_valid():
-#       form.save()
-#       messages.success(request, 'Category edited successfully.')
-#       return redirect('subCategories', cat_slug)
-#     else:
-#       messages.error(request, 'Invalid input')
-#       return redirect('editSubCategory')
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Subcategory edited successfully.')
+      return redirect('admin_subcategories', cat_slug)
+    else:
+      messages.error(request, 'Invalid input')
+      return redirect('edit_subcategory')
       
-#   form =   SubCategoryForm(instance=subCategory)
-#   context = {
-#     'form':form,
-#     'subCategory':subCategory,
-#   }
-#   return render(request, 'admin_panel/edit_subcategory.html', context)
+  form =   SubCategoryForm(instance=sub_category)
+  context = {
+    'form':form,
+    'sub_category':sub_category,
+  }
+  return render(request, 'admin_panel/category_management/admin_edit_subcategory.html', context)
 
-# @staff_member_required(login_url = 'adminLogin')  
-# def delete_subcategory(request, slug):
-#   sub_category = Sub_Category.objects.get(slug=slug)
-#   cat_slug = sub_category.category.slug
-#   sub_category.delete()
-#   messages.success(request, 'Sub Category deleted successfully.')
-#   return redirect('subCategories', cat_slug)
+@staff_member_required(login_url = 'admin_login')  
+def delete_subcategory(request, slug):
+  sub_category = Sub_Category.objects.get(slug=slug)
+  category_slug = sub_category.category.slug
+  sub_category.delete()
+  messages.success(request, 'Subcategory deleted successfully.')
+  return redirect('admin_subcategories', category_slug)
  
 
 

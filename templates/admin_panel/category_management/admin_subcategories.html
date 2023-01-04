@@ -1,0 +1,58 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 1rem;">Subcategories of {{category_slug|capfirst}}</h2>
+          
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-ite"><a href="{% url 'admin_add_subcategory' category_slug %}" class="btn btn-success">+ Add Subcategory</a></li>
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+        {% if not sub_categories %}  
+        <h4 class="mx-3 text-warning"> Sorry! <br > <br> No subcategories for  {{category_slug|capfirst}} </h4>
+        {% else %}
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Sub Category Name</th>
+        <th>Description</th>
+        <th>Is_featured</th>
+        <th>Edit</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody> 
+
+      {% for subcategory in sub_categories %}
+      <tr style="height: 50px !important;" class="text-wrap">
+        <th scope="row">{{subcategory.sub_category_name}}</th>
+        <td>{{subcategory.description|truncatechars:10}}</td>
+        <td>{% if subcategory.is_featured %} Featured {% else %} Not Featured {% endif %}</td>
+        <td>
+          <div class="pro-img-overlay"><a href="{% url 'edit_subcategory' subcategory.slug %}" ><i class="mdi mdi-tooltip-edit"></i></a>
+          </div> 
+        </td>
+        <td>
+          <div class="pro-img-overlay"><a href="{% url 'delete_subcategory' subcategory.slug %}">
+            <i class="mdi mdi-delete-forever text-danger"></i></a>
+          </div>
+        </td>
+      </tr>
+        
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %} 
+        </div>
+        </div>
+        
+{% endblock content %}

@@ -24,8 +24,8 @@ urlpatterns = [
     path('category_offers/', views.category_offers, name='category_offers'),
     path('add_category_offer/', views.add_category_offer, name='add_category_offer'),
     path('delete_category_offer/<int:id>/', views.delete_category_offer, name='delete_category_offer'),
-    # path('<str:category_slug>/subCategories/', views.subCategories, name='subCategories'),
-    # path('<str:category_slug>/addSubCategory/', views.addSubCategory, name='addSubCategory'),
-    # path('<str:slug>/editSubCategory/', views.editSubCategory, name='editSubCategory'),
-    # path('<str:slug>/deleteSubCategory/', views.deleteSubCategory, name='deleteSubCategory'),
+    path('<str:category_slug>/subcategories/', views.subcategories, name='admin_subcategories'),
+    path('<str:category_slug>/add_subcategory/', views.add_subcategory, name='admin_add_subcategory'),
+    path('<str:slug>/edit_subcategory/', views.edit_subcategory, name='edit_subcategory'),
+    path('<str:slug>/delete_subcategory/', views.delete_subcategory, name='delete_subcategory'),
 ]

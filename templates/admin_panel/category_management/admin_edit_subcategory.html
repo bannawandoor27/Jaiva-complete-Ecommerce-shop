@@ -1,0 +1,52 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 4rem;">Edit Subcategory {{sub_category|capfirst}}</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+
+        <div class="container" >
+            <form action="{% url 'edit_subcategory' sub_category.slug %}" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+          
+              <div class="col form-group">
+                  <label >Sub Category Name</label><br>
+                  {{form.sub_category_name}}  
+              </div>
+              <div class="col form-group">
+                  <label > Slug</label><br>
+                  {{form.slug}}  
+              </div>
+              <div class="col-6 form-group">
+                  <label > Category</label><br>
+                  {{form.category}}  
+              </div>
+              <div class="col-6 form-group">
+                <label > Description</label><br>
+                {{form.description}}  
+              </div>
+              <div class="col-6 form-group">
+                <label >Is Featured</label><br>
+                <span class="mx-4"> {{form.is_featured}}</span>
+              </div>
+                               
+              <div class="col form-group">
+                 <a href=""> <input type="submit" name="submit" id="submit" class="btn btn-info" value="Save"/></a>
+              </div>
+            </form>
+          </div>
+    </div>
+    </div>
+    </div>
+
+{% endblock content%}

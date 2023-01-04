@@ -60,12 +60,13 @@ class SubCategoryForm(forms.ModelForm):
     class Meta:
          model = Sub_Category
          fields = ['sub_category_name', 'slug', 'description', 'category', 'is_featured',]
-        
+         
     def __init__(self, *args, **kwargs):
         super(SubCategoryForm,self).__init__(*args, **kwargs)
         for field  in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
-            
+        self.fields['is_featured'].widget.attrs['type'] = 'checkbox'
+        self.fields['is_featured'].widget.attrs['class'] = 'form-check-input'
 class UserForm(forms.ModelForm):
     class Meta:
         model = Account
