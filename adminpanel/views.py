@@ -3,6 +3,7 @@ from django.contrib import messages, auth
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+from category.models import Category
 from jaivashop.models import ContactMessage
 # Create your views here.
 from django.contrib import messages
@@ -10,11 +11,13 @@ from datetime import datetime,date,timedelta
 from accounts.models import *
 from orders.models import *
 import calendar
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.cache import never_cache
 from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm, VariationForm,BlogForm
 from django.core.mail import EmailMessage
 from blog.models import Blog
+from django.core.paginator import Paginator
 @never_cache
 def admin_login(request):
   if 'email' in request.session:
@@ -105,8 +108,10 @@ def admin_dashboard_monthwise(request,month):
     selected_month = taken_month[:3]
     selected_year = taken_month[4:9]
     today = datetime.today()
+    selected_month_num = datetime.strptime(selected_month, '%b').month
+    month_range  =calendar.monthrange(int(selected_year),int(selected_month_num))[1]
     
-    day = today.day if selected_year==today.year else 31
+    day = today.day if selected_year==today.year else month_range
     month = datetime.strptime(selected_month, '%b').month
     customers_count = Account.objects.filter(is_admin=False,date_jointed__year= selected_year,date_jointed__month=month).count()
     orders_count = Order.objects.filter(is_ordered=True,created_at__year = selected_year,created_at__month=month,).count()
@@ -120,7 +125,6 @@ def admin_dashboard_monthwise(request,month):
         month_list= month_list+(list(map(lambda x : calendar.month_abbr[x]+'-'+str(year),range(1,month+1))))[::-1]
     # x= total_orders[0].created_at.date().day
     order_count_per_day = []
-    selected_month_num = datetime.strptime(selected_month, '%b').month
     for day in range (1,(day+1)):
         day_order = Order.objects.filter(is_ordered=True,created_at__year = selected_year,created_at__month=selected_month_num, created_at__day=day).count()
         order_count_per_day.append(day_order)
@@ -174,7 +178,7 @@ def reply_message(request):
     return redirect('admin_messages')
 
 def admin_blog(request):
-    return render(request,'admin_panel/admin_blog.html')
+    return render(request,'admin_panel/blog_management/admin_blog.html')
 
 def add_blog(request):
     if request.method == 'POST':
@@ -218,3 +222,123 @@ def edit_blog_single(request,id):
     post_description = post.description
     )
     return JsonResponse(context)
+
+
+# Admin User Management
+def admin_user_management(request):
+  if request.method == 'POST':
+    search_key = request.POST.get('search')
+    users = Account.objects.filter(Q(first_name__icontains=search_key) | Q(last_name__icontains=search_key) | Q(email__icontains=search_key),is_superadmin=False)
+    paginator = Paginator(users, 5)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+  else:
+    users = Account.objects.all().filter(is_superadmin=False).order_by('-id')
+    paginator = Paginator(users, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+  context = {
+    'users': page_obj
+  }
+  return render(request,'admin_panel/user_management/admin_user_management.html',context)
+
+@staff_member_required(login_url = 'admin_login')
+def edit_user_data(request, id):
+  user = Account.objects.get(id=id)
+  
+  if request.method == 'POST':
+    form = UserForm(request.POST, request.FILES, instance=user)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'User Account edited successfully.')
+      return redirect('admin_user_management')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('edit_user_data', id)
+    
+  else:
+    form = UserForm(instance=user)
+  
+  context = {
+    'form':form,
+    'id':id,
+  }
+    
+  return render(request, 'admin_panel/user_management/edit_user_data.html', context)
+
+@staff_member_required(login_url = 'admin_login')
+def block_user(request, id):
+    users = Account.objects.get(id=id)
+    if users.is_active:
+        users.is_active = False
+        users.save()
+
+    else:
+         users.is_active = True
+         users.save()
+
+    return redirect('admin_user_management')
+
+# Admin Category Management
+@staff_member_required(login_url = 'admin_login')
+def admin_categories(request):
+  categories = Category.objects.all().order_by('id')
+  
+  paginator = Paginator(categories, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'categories':page_obj
+  }
+  return render(request, 'admin_panel/category_management/admin_categories.html', context)
+
+@staff_member_required(login_url = 'admin_login')
+def admin_add_category(request):
+  if request.method == 'POST':
+    form = CategoryForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Category added successfully.')
+      return redirect('admin_categories')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('admin_add_category')
+  else:
+    form = CategoryForm()
+    context = {
+      'form':form,
+    }
+    return render(request, 'admin_panel/category_management/admin_add_category.html', context)
+  
+@staff_member_required(login_url = 'admin_login')
+def admin_edit_category(request, slug):
+  category = Category.objects.get(slug=slug)
+  
+  if request.method == 'POST':
+    form = CategoryForm(request.POST, request.FILES, instance=category)
+    
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Category edited successfully.')
+      return redirect('admin_categories')
+    else:
+      messages.error(request, 'Invalid input')
+      return redirect('admin_edit_category', slug)
+      
+  form =   CategoryForm(instance=category)
+  context = {
+    'form':form,
+    'category':category,
+  }
+  return render(request, 'admin_panel/category_management/admin_edit_category.html', context)
+  
+@staff_member_required(login_url = 'admin_login')  
+def admin_delete_category(request, slug):
+  category = Category.objects.get(slug=slug)
+  category.delete()
+  messages.success(request, 'Category deleted successfully.')
+  return redirect('admin_categories')
+
+

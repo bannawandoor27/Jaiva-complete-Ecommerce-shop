@@ -14,5 +14,12 @@ urlpatterns = [
     path('delete_blog/<int:id>',views.delete_blog,name='delete_blog'),
     path('edit_blog/<int:id>',views.edit_blog,name='edit_blog'),
     path('edit_blog_single/<int:id>',views.edit_blog_single,name='edit_blog_single'),
-    
+    path('admin_user_management',views.admin_user_management,name='admin_user_management'),
+    path('<int:id>/edit_user_data/', views.edit_user_data, name='edit_user_data'),
+    path('<int:id>/block_user/', views.block_user, name='block_user'),
+    path('admin_categories',views.admin_categories,name='admin_categories'),
+    path('<str:catergory_slug>/edit_category',views.admin_edit_category,name='admin_edit_category'),
+    path('<str:category_slug>/delete_catergory',views.admin_delete_category,name='admin_delete_catergory'),
+    path('add_category',views.admin_add_category,name='admin_add_category'),
+  
 ]

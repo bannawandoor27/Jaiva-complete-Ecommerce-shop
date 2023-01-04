@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import CheckboxInput
 from jaivashop.models import Product, Variation
 from category.models import Category, Sub_Category
 from accounts.models import Account
@@ -68,7 +69,7 @@ class SubCategoryForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ['first_name', 'last_name', 'email', 'phone_number', 'is_admin', 'is_staff', 'is_superadmin']
+        fields = ['first_name', 'last_name', 'email', 'phone_number', 'is_admin', 'is_staff', 'is_superadmin','is_active']
         
     def __init__(self, *args, **kwargs):
         super(UserForm,self).__init__(*args, **kwargs)
@@ -76,7 +77,14 @@ class UserForm(forms.ModelForm):
         
         for field  in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
-            
+        self.fields['is_admin'].widget.attrs['class'] = 'form-check-input'
+        self.fields['is_active'].widget.attrs['class'] = 'form-check-input'
+        self.fields['is_staff'].widget.attrs['class'] = 'form-check-input'
+        self.fields['is_superadmin'].widget.attrs['class'] = 'form-check-input'
+        self.fields['is_admin'].widget.attrs['type'] = 'checkbox'
+        self.fields['is_active'].widget.attrs['type'] = 'checkbox'
+        self.fields['is_staff'].widget.attrs['type'] = 'checkbox'
+        self.fields['is_superadmin'].widget.attrs['type'] = 'checkbox'
 class DateInput(forms.DateInput):
     input_type = 'date'
 
