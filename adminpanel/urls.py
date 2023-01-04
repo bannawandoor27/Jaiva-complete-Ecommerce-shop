@@ -21,5 +21,11 @@ urlpatterns = [
     path('<str:category_slug>/edit_category',views.admin_edit_category,name='admin_edit_category'),
     path('<str:category_slug>/delete_category',views.admin_delete_category,name='admin_delete_category'),
     path('add_category',views.admin_add_category,name='admin_add_category'),
-  
+    path('category_offers/', views.category_offers, name='category_offers'),
+    path('add_category_offer/', views.add_category_offer, name='add_category_offer'),
+    path('delete_category_offer/<int:id>/', views.delete_category_offer, name='delete_category_offer'),
+    # path('<str:category_slug>/subCategories/', views.subCategories, name='subCategories'),
+    # path('<str:category_slug>/addSubCategory/', views.addSubCategory, name='addSubCategory'),
+    # path('<str:slug>/editSubCategory/', views.editSubCategory, name='editSubCategory'),
+    # path('<str:slug>/deleteSubCategory/', views.deleteSubCategory, name='deleteSubCategory'),
 ]

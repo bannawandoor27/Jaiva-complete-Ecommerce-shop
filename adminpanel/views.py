@@ -3,7 +3,7 @@ from django.contrib import messages, auth
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from category.models import Category
+from category.models import Category, Sub_Category
 from jaivashop.models import ContactMessage
 # Create your views here.
 from django.contrib import messages
@@ -340,5 +340,102 @@ def admin_delete_category(request, category_slug):
   category.delete()
   messages.success(request, 'Category deleted successfully.')
   return redirect('admin_categories')
+
+#  Admin Category Offers
+@staff_member_required(login_url = 'admin_login')  
+def category_offers(request):
+  categories = Category.objects.all().order_by('-category_offer')
+  
+  paginator = Paginator(categories, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'categories':page_obj,
+  }
+  return render(request, 'admin_panel/category_management/admin_category_offers.html', context)
+
+@staff_member_required(login_url= 'admin_login')
+def add_category_offer(request):
+  if request.method == 'POST' :
+    category_name = request.POST.get('category_name')
+    category_offer = request.POST.get('category_offer')
+    category = Category.objects.get(category_name = category_name)
+    category.category_offer =  category_offer
+    category.save()
+    messages.success(request,'Category offer added successfully')
+    return redirect('category_offers')
+      
+@staff_member_required(login_url= 'admin_login')
+def delete_category_offer(request, id):
+  category = Category.objects.get(id = id)
+  category.category_offer =  0
+  category.save()
+  messages.success(request,'Category offer deleted successfully')
+  return redirect('category_offers')
+
+
+# # sub category management
+
+# @staff_member_required(login_url = 'admin_login')
+# def subcategories(request, category_slug):
+#   sub_categories = Sub_Category.objects.all().filter(category__slug=category_slug)
+#   context = {
+#     'sub_categories':sub_categories,
+#     'category_slug':category_slug,
+#   }
+#   return render(request, 'admin_panel/category_management/admin_sub_categories.html', context)
+
+# @staff_member_required(login_url = 'admin_login')
+# def add_subcategory(request, category_slug):
+#   category = Category.objects.get(slug=category_slug)
+#   if request.method == 'POST':
+#     form = SubCategoryForm(request.POST, request.FILES)
+#     if form.is_valid():
+#       form.save()
+#       messages.success(request, 'Sub Category added successfully.')
+#       return redirect('subCategories', category_slug)
+#     else:
+#       messages.error(request, 'Invalid input!!!')
+#       return redirect('addSubCategory', category_slug)
+#   else:
+#     form = SubCategoryForm()
+#     context = {
+#       'form':form,
+#       'category':category
+#     }
+#     return render(request, 'admin_panel/category_management/add_subcategory.html', context)
+  
+# @staff_member_required(login_url = 'admin_login')
+# def edit_subcategory(request, slug):
+#   subCategory = Sub_Category.objects.get(slug=slug)
+#   cat_slug = subCategory.category.slug
+  
+#   if request.method == 'POST':
+#     form = SubCategoryForm(request.POST, request.FILES, instance=subCategory)
+    
+#     if form.is_valid():
+#       form.save()
+#       messages.success(request, 'Category edited successfully.')
+#       return redirect('subCategories', cat_slug)
+#     else:
+#       messages.error(request, 'Invalid input')
+#       return redirect('editSubCategory')
+      
+#   form =   SubCategoryForm(instance=subCategory)
+#   context = {
+#     'form':form,
+#     'subCategory':subCategory,
+#   }
+#   return render(request, 'admin_panel/edit_subcategory.html', context)
+
+# @staff_member_required(login_url = 'adminLogin')  
+# def delete_subcategory(request, slug):
+#   sub_category = Sub_Category.objects.get(slug=slug)
+#   cat_slug = sub_category.category.slug
+#   sub_category.delete()
+#   messages.success(request, 'Sub Category deleted successfully.')
+#   return redirect('subCategories', cat_slug)
+ 
 
 
