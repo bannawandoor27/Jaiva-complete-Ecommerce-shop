@@ -375,7 +375,7 @@ def delete_category_offer(request, id):
   return redirect('category_offers')
 
 
-# sub category management
+# Subcategory management
 
 @staff_member_required(login_url = 'admin_login')
 def subcategories(request, category_slug):
@@ -437,5 +437,99 @@ def delete_subcategory(request, slug):
   messages.success(request, 'Subcategory deleted successfully.')
   return redirect('admin_subcategories', category_slug)
  
+
+ 
+# Product management
+  
+@staff_member_required(login_url = 'admin_login')
+def admin_products(request):
+  products = Product.objects.all().order_by('-id')
+  
+  paginator = Paginator(products, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'products': page_obj
+  }
+  return render(request, 'admin_panel/product_management/admin_products.html', context)
+
+@staff_member_required(login_url = 'admin_login')
+def admin_add_product(request):
+  if request.method == 'POST':
+    form = ProductForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Product added successfully.')
+      return redirect('admin_products')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('admin_add_product')
+  else:
+    form = ProductForm()
+    context = {
+      'form':form,
+    }
+    return render(request, 'admin_panel/product_management/admin_add_product.html', context)
+
+@staff_member_required(login_url = 'admin_login')
+def admin_edit_product(request, id):
+  product = Product.objects.get(id=id)
+  
+  if request.method == 'POST':
+    form = ProductForm(request.POST, request.FILES, instance=product)
+    
+    if form.is_valid():
+      form.save()
+      messages.success(request, 'Product edited successfully.')
+      return redirect('products')
+    else:
+      messages.error(request, 'Invalid input')
+      
+  form =   ProductForm(instance=product)
+  context = {
+    'form':form,
+    'product':product,
+  }
+  return render(request, 'admin_panel/product_management/admin_edit_product.html', context)
+
+@staff_member_required(login_url = 'admin_login')  
+def admin_delete_product(request, id):
+  product = Product.objects.get(id=id)
+  product.delete()
+  return redirect('admin_products')
+
+@staff_member_required(login_url = 'admin_login')  
+def admin_product_offers(request):
+  products = Product.objects.all().order_by('-product_offer')
+  
+  paginator = Paginator(products, 10)
+  page_number = request.GET.get('page')
+  page_obj = paginator.get_page(page_number)
+  
+  context = {
+    'products':page_obj,
+  }
+  return render(request, 'admin_panel/product_management/admin_product_offers.html', context)
+
+@staff_member_required(login_url= 'admin_login')
+def add_product_offer(request):
+  if request.method == 'POST' :
+    product_name = request.POST.get('product_name')
+    product_offer = request.POST.get('product_offer')
+    product = Product.objects.get(product_name = product_name)
+    product.product_offer =  product_offer
+    product.save()
+    messages.success(request,'Product offer added successfully')
+    return redirect('admin_product_offers')
+  
+@staff_member_required(login_url= 'admin_login')
+def delete_product_offer(request, id):
+  product = Product.objects.get(id=id)
+  product.product_offer = 0
+  product.save()
+  messages.success(request, 'Product offer deleted successfully')
+  return redirect('admin_product_offers')
+
 
 

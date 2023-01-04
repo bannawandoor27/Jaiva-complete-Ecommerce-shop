@@ -28,4 +28,11 @@ urlpatterns = [
     path('<str:category_slug>/add_subcategory/', views.add_subcategory, name='admin_add_subcategory'),
     path('<str:slug>/edit_subcategory/', views.edit_subcategory, name='edit_subcategory'),
     path('<str:slug>/delete_subcategory/', views.delete_subcategory, name='delete_subcategory'),
+    path('admin_products/', views.admin_products, name='admin_products'),
+    path('<int:id>/admin_delete_product/', views.admin_delete_product, name='admin_delete_product'),
+    path('<int:id>/admin_edit_product/', views.admin_edit_product, name='admin_edit_product'),
+    path('admin_add_product/', views.admin_add_product, name='admin_add_product'),
+    path('admin_product_offers/', views.admin_product_offers, name='admin_product_offers'),
+    path('add_product_offer/', views.add_product_offer, name='add_product_offer'),
+    path('delete_product_offer/<int:id>/', views.delete_product_offer, name='delete_product_offer'),
 ]
