@@ -9,12 +9,13 @@
           <h2 class="page-title " style="margin-left: 4rem;">Products</h2>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <li class="breadcrumb-ite"><a href="{% url 'admin_add_category' %}" class="btn btn-success">+ Add Product</a></li>
+              <li class="breadcrumb-ite"><a href="{% url 'admin_add_product' %}" class="btn btn-success">+ Add Product</a></li>
               <li class="breadcrumb-item active" aria-current="page"></li>
             </ol>
           </nav>
         </div>
         {% include 'includes/alerts.html' %}
+        <div class="container">
             <table class="table table-hover">
               <thead>
                 <tr>
@@ -45,16 +46,16 @@
                   <td>₹{{product.price}}</td>
                   <td style="max-height: 20px;">{{product.description|truncatechars:20}}</td>
                   <td>{{product.stock}}</td>
-                  <td>{{product.is_available}}</td>
-                  <td>{{product.is_featured}}</td>
+                  <td>{% if product.is_available %} Available {% else %}Not Available{% endif %}</td>
+                  <td>{%if product.is_featured %} Featured {% else %} Not Featurd {% endif %}</td>
                   <td>
-                    <div class="pro-img-overlay"><a href="{% url 'admin_edit_product' product.id  %}" ><i class="fas fa-edit text-warning"></i></a>
+                    <div class="pro-img-overlay"><a href="{% url 'admin_edit_product' product.id  %}" ><i class="mdi mdi-tooltip-edit"></i></a>
                     </div> 
                   </td>
                   <td>
                     <div class="pro-img-overlay">
                       <a href="" data-toggle="modal" data-target="#modal{{product.id}}">
-                      <i class="fas fa-trash-alt text-danger"></i> </a>
+                      <i class="mdi mdi-delete-forever text-danger"></i> </a>
                     </div> 
                   </td>
                 </tr>
@@ -111,6 +112,7 @@
             </nav>
           
           </div>
+        </div>
         </div>
     </div>
 </div>

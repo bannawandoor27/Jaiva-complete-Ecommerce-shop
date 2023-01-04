@@ -31,10 +31,12 @@ class ProductForm(forms.ModelForm):
         super(ProductForm,self).__init__(*args, **kwargs)
         self.fields['price'].widget.attrs['min'] = 0
         self.fields['stock'].widget.attrs['min'] = 0
-        self.fields['category'].widget.attrs['onchange'] = "getval(this);"
-
         for field  in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+        self.fields['is_available'].widget.attrs['type'] = 'checkbox'
+        self.fields['is_featured'].widget.attrs['type'] = 'checkbox'
+        self.fields['is_available'].widget.attrs['class'] = 'form-check-input'
+        self.fields['is_featured'].widget.attrs['class'] = 'form-check-input'
             
 class VariationForm(forms.ModelForm):
     class Meta:

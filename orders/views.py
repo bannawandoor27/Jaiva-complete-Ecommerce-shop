@@ -182,7 +182,10 @@ def payments(request):
         order_product.save()
 
         product = Product.objects.get( id = cart_item.product_id)
-        product.stock -= cart_item.quantity
+        if product.stock>cart_item.quantity:
+          product.stock -= cart_item.quantity
+        else:
+          messages.error(request,'Number of stocks exceeded!')
         product.save()
     
     #clear cart
