@@ -23,7 +23,7 @@ class Product(models.Model):
   image_2 = models.ImageField(upload_to='photos/products', blank=True)
   image_3 = models.ImageField(upload_to='photos/products', blank=True)
   image_4 = models.ImageField(upload_to='photos/products', blank=True)
-  stock = models.IntegerField()
+  stock = models.PositiveIntegerField()
   is_available = models.BooleanField(default=True)
   is_featured = models.BooleanField(default=False)
   category = models.ForeignKey(Category, on_delete=models.CASCADE)
