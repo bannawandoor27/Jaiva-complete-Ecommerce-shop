@@ -443,8 +443,11 @@ def delete_subcategory(request, slug):
   
 @staff_member_required(login_url = 'admin_login')
 def admin_products(request):
-  products = Product.objects.all().order_by('-id')
-  
+  if request.method == 'POST':
+    search_key = request.POST.get('search')
+    products = Product.objects.filter(Q(product_name__icontains=search_key) | Q(category__icontains=search_key) | Q(sub_category__icontains=search_key))
+  else:
+    products = Product.objects.all().order_by('-id')
   paginator = Paginator(products, 10)
   page_number = request.GET.get('page')
   page_obj = paginator.get_page(page_number)
@@ -481,10 +484,10 @@ def admin_edit_product(request, id):
     
     if form.is_valid():
       form.save()
-      messages.success(request, 'Product edited successfully.')
-      return redirect('products')
+      messages.success(request, 'product data edited successfully.')
+      return redirect('admin_products')
     else:
-      messages.error(request, 'Invalid input')
+      messages.error(request, 'Invalid parameters')
       
   form =   ProductForm(instance=product)
   context = {

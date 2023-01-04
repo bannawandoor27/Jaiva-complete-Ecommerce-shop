@@ -2,6 +2,87 @@
 {% load static %}
 
 {% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 4rem;">Add Product</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+        <div class="container">
+            <form action="{% url 'admin_edit_product' product.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+            
+                <div class="col form-group">
+                    <label > Product Name</label><br>
+                    {{form.product_name}}  
+                </div>
+                <div class="col form-group">
+                    <label > Slug</label><br>
+                    {{form.slug}}  
+                </div>
+                <div class="col-6 form-group">
+                    <label > Category</label><br>
+                    {{form.category}}  
+                </div>
+                <div class="col-6 form-group">
+                    <label > Subcategory</label><br>
+                    {{form.sub_category}}  
+                </div>
 
+                <div class="col form-group">
+                    <label > Description</label><br>
+                    {{form.description}}  
+                </div>
+                <div class="col-3 form-group">
+                    <label > Price </label><br>
+                    {{form.price}} 
+                </div>
+                <div class="col-3 form-group">
+                    <label > Unit </label><br>
+                    {{form.unit}} 
+                </div>
+                <div class="col-3 form-group">
+                  <label > Stock </label><br>
+                  {{form.stock}}
+              </div>
+                <div class="col form-group">
+                    <label > Image 1 </label><br>
+                    {{form.image_1}}
+                </div>
+                <div class="col form-group">
+                    <label > Image 2 </label><br>
+                    {{form.image_2}}
+                </div>
+                <div class="col form-group">
+                    <label > Image 3 </label><br>
+                    {{form.image_3}}
+                </div>
+                <div class="col form-group">
+                    <label > Image 4 </label><br>
+                    {{form.image_4}}
+                </div>
+                <div class="col form-group">
+                    <label > Is Available </label><br>
+                    <span class="mx-4">{{form.is_available}}</span>
+                </div>
+                <div class="col form-group">
+                    <label > Is Featured </label><br>
+                    <span class="mx-4">{{form.is_featured}}</span>
+                </div>
+                                 
+                <div class="col form-group">
+                   <a href=""> <input type="submit" name="submit" id="submit" class="btn btn-info" value="Save"/></a>
+                </div>
+              </form>
 
+        </div>
+    </div>
+ </div>
+ </div>
 {% endblock content %}
