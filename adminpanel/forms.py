@@ -37,16 +37,6 @@ class ProductForm(forms.ModelForm):
         self.fields['is_featured'].widget.attrs['type'] = 'checkbox'
         self.fields['is_available'].widget.attrs['class'] = 'form-check-input'
         self.fields['is_featured'].widget.attrs['class'] = 'form-check-input'
-            
-class VariationForm(forms.ModelForm):
-    class Meta:
-        model = Variation
-        fields = ['product', 'variation_category', 'variation_value', 'is_active']
-        
-    def __init__(self, *args, **kwargs):
-        super(VariationForm,self).__init__(*args, **kwargs)
-        for field  in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
                 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -101,6 +91,7 @@ class CouponForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CouponForm,self).__init__(*args, **kwargs)
         self.fields['valid_at'].widget.attrs['min'] = str(datetime.date.today())
-        
+        self.fields['active'].widget.attrs['type'] = 'checkbox'
         for field  in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
+        self.fields['active'].widget.attrs['class'] = 'form-check-input'

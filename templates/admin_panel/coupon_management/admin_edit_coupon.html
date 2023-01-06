@@ -1,0 +1,47 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 3.5rem;">Edit Coupon {{coupon.name}}</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+        <form action="{% url 'admin_edit_coupon' coupon.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+        
+            <div class="col-6 form-group">
+                <label > Code</label><br>
+                {{form.code}}  
+            </div>
+            <div class="col-2 form-group">
+                <label > Discount</label><br>
+                {{form.discount}}
+            </div>
+            <div class="col-2 form-group">
+                <label > Min Value</label><br>
+                {{form.min_value}}  
+            </div>
+            <div class="col-2 form-group">
+                <label > Expiry Date</label><br>
+                {{form.valid_at}}
+            </div>
+            <div class="col form-group">
+              <label > Is Active </label><br>
+               <span class="mx-4"> {{form.active}}</span>
+           
+            </div>
+            <div class="col form-group">
+               <a href=""> <input type="submit" name="submit" id="submit" class="btn btn-warning" value="Save"/></a>
+            </div>
+          </form>
+        </div>
+{% endblock content %}
+    

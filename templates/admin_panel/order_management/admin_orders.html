@@ -6,7 +6,7 @@
     <div class="content-wrapper" >
       <div class="">
         <div class="page-header ">
-          <h2 class="page-title " style="margin-left: 1rem;">Orders</h2>
+          <h2 class="page-title " style="margin-left: 3rem;">Orders</h2>
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item active" aria-current="page"></li>
@@ -37,7 +37,7 @@
                     <th scope="row">
                       <a href="" class="text-white">{{order.id}}</a></th>
                     <td>{{order.full_name}}</td>
-                    <td>{{order.email}}</td>
+                    <td>{{order.email|truncatechars:20}}</td>
                     <td>₹{{order.order_total}}</td>
                     <td>{{order.payment.payment_method}}</td>
                     <td>{{order.order_number}}</td>

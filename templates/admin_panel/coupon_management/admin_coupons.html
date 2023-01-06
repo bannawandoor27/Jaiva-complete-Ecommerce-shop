@@ -1,0 +1,78 @@
+{% extends 'admin_panel/admin_base.html' %}
+{% load static %}
+
+
+{% block content %}
+<div class="main-panel">
+    <div class="content-wrapper" >
+      <div class="">
+        <div class="page-header ">
+          <h2 class="page-title " style="margin-left: 3.5rem;">Coupons</h2>
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-ite"><a href="{% url 'admin_add_coupon' %}" class="btn btn-success">+ Add Coupon</a></li>
+            </ol>
+          </nav>
+        </div>
+        {% include 'includes/alerts.html' %}
+        <div class="container">
+
+            <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Coupon Code</th>
+                    <th>Discount</th>
+                    <th>Min Price</th>
+                    <th>Expiry Date</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody id="myTable">
+                  
+                  {% for coupon in coupons %}
+            
+                  <tr style="height: 50px !important;" class="text-wrap">
+                    <th scope="row">{{coupon.code}}</th>
+                    <td>{{coupon.discount}}%</td>
+                    <td>₹{{coupon.min_value}}</td>
+                    <td>{{coupon.valid_at}}</td>
+                    <td>
+                        <div><a href="{% url 'admin_edit_coupon' coupon.id %}" ><i class="mdi mdi-tooltip-edit"></i></a>
+                        </div> 
+                    </td>
+                    <td>
+                      <div class=""><a href="" data-toggle="modal" data-target="#modal{{coupon.id}}">
+                        <i class="mdi mdi-delete-forever text-danger"></i></a>
+                      </div> 
+                    </td>
+                  </tr>
+            
+                  <div class="modal fade" id="modal{{coupon.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Delete Coupon?</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body text-left">
+                          Are you sure to delete coupon: <b>{{coupon.code}}?</b>?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                          <a href="{% url 'admin_delete_coupon' coupon.id %}"  type="button" class="btn btn-primary">Yes</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    
+                  {% endfor %}
+                    
+                </tbody>
+              </table>
+            </div>
+        </div>
+{% endblock content %}
+    

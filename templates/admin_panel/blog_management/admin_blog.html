@@ -21,7 +21,7 @@
         <div class="card">
           <div class="card-body">
             {% if blog.image %}
-            <img src="{{blog.image.url}}" alt="" style="height:10rem; width:30rem" class="mb-4"> 
+            <img src="{{blog.image.url}}" alt="" style="height:10rem; max-width: 100%; width: 33rem;" class="mb-4"> 
             {% endif %}
             <h4 class="card-title">{{blog.heading}}</h4>
             <p class="card-description p-0">{{blog.time_ago}}</p>

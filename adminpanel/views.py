@@ -12,7 +12,8 @@ from accounts.models import *
 from orders.models import *
 import calendar
 from django.db.models import Q
-from django.http import JsonResponse
+from django.db.models import Sum,FloatField
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.cache import never_cache
 from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm, VariationForm,BlogForm
 from django.core.mail import EmailMessage
@@ -21,7 +22,7 @@ from django.core.paginator import Paginator
 @never_cache
 def admin_login(request):
   if 'email' in request.session:
-    return redirect('dashboard')
+    return redirect('admin_dashboard')
     
   if request.method == 'POST':
     # form = LoginForm(request.POST)
@@ -35,7 +36,7 @@ def admin_login(request):
         request.session['email'] = email
         
         login(request, user)
-        return redirect('dashboard')
+        return redirect('admin_dashboard')
         
       else:
         messages.error(request, 'You are not autherized to access admin panel')
@@ -54,7 +55,7 @@ def admin_logout(request):
     auth.logout(request)
     messages.success(request, "You are logged out.")
     return redirect('admin_login')
-
+@staff_member_required(login_url = 'admin_login')
 def admin_dashboard(request):
     customers_count = Account.objects.filter(is_admin=False).count()
     orders_count = Order.objects.filter(is_ordered=True).count()
@@ -100,7 +101,7 @@ def admin_dashboard(request):
         'bar_data'        : bar_data_list
     }
     return render(request,'admin_panel/admin_dashboard.html',context)
-
+@staff_member_required(login_url = 'admin_login')
 def admin_dashboard_monthwise(request,month):
     total_orders = Order.objects.filter(is_ordered=True).order_by('created_at')
     first_order_date = total_orders[0].created_at.date()
@@ -148,20 +149,20 @@ def admin_dashboard_monthwise(request,month):
     }
     
     return render(request,'admin_panel/admin_dashboard.html',context)
-
+@staff_member_required(login_url = 'admin_login')
 def admin_messages(request):
     messages_recieved  = ContactMessage.objects.all().order_by('-sent_time')
     context = {
         'messages_recieved' : messages_recieved,
     }
     return render(request,'admin_panel/admin_messages.html',context)
-
+@staff_member_required(login_url = 'admin_login')
 def delete_message(request,id):
     message = ContactMessage.objects.get(id=id)
     message.delete()
     messages.error(request,'message deleted successfully!')
     return redirect('admin_messages')
-
+@staff_member_required(login_url = 'admin_login')
 def reply_message(request):
     try:
         if request.method == 'POST':
@@ -176,10 +177,10 @@ def reply_message(request):
     except:
         messages.error(request,'Server down! please ensure you are connected to internet')
     return redirect('admin_messages')
-
+@staff_member_required(login_url = 'admin_login')
 def admin_blog(request):
     return render(request,'admin_panel/blog_management/admin_blog.html')
-
+@staff_member_required(login_url = 'admin_login')
 def add_blog(request):
     if request.method == 'POST':
         heading = request.POST['heading']
@@ -192,13 +193,13 @@ def add_blog(request):
         return redirect('admin_blog')
     else:
         return redirect('admin_blog')
-
+@staff_member_required(login_url = 'admin_login')
 def delete_blog(request,id):
     blog = Blog.objects.get(id=id)
     blog.delete()
     messages.success(request,'Post deleted successfully')
     return redirect('admin_blog')
-
+@staff_member_required(login_url = 'admin_login')
 def edit_blog(request,id):
     post = Blog.objects.get(id=id)
     if request.method == 'POST':
@@ -213,7 +214,7 @@ def edit_blog(request,id):
     else:
         messages.error(request,'Some error occured!')
         return redirect('admin_blog')
-
+@staff_member_required(login_url = 'admin_login')
 def edit_blog_single(request,id):
     post = Blog.objects.get(id=id)
     context = dict(
@@ -225,6 +226,7 @@ def edit_blog_single(request,id):
 
 
 # Admin User Management
+@staff_member_required(login_url = 'admin_login')
 def admin_user_management(request):
   if request.method == 'POST':
     search_key = request.POST.get('search')
@@ -543,6 +545,8 @@ def admin_orders(request):
   paginator = Paginator(orders, 10)
   page_number = request.GET.get('page')
   page_obj = paginator.get_page(page_number)
+
+  
   
   context = {
     'orders':page_obj,
@@ -565,4 +569,100 @@ def admin_change_order(request, id):
       except:
           pass
   return redirect('admin_orders')
+
+
+
+@staff_member_required(login_url = 'admin_login')
+def admin_coupons(request):
+  coupons = Coupon.objects.all()
+  context = {
+    'coupons':coupons,
+  }
+  return render(request, 'admin_panel/coupon_management/admin_coupons.html', context)
+
+@staff_member_required(login_url = 'admin_login')
+def admin_add_coupon(request):
+  if request.method == 'POST':
+    form = CouponForm(request.POST , request.FILES)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Coupon Added successfully')
+      return redirect('admin_coupons')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('admin_add_coupon')
+  form = CouponForm()
+  context = {
+    'form':form,
+  }
+  return render(request, 'admin_panel/coupon_management/admin_add_coupon.html', context)
+
+@staff_member_required(login_url = 'admin_login')
+def admin_edit_coupon(request, id):
+  coupon = Coupon.objects.get(id = id)
+  if request.method == 'POST':
+    form = CouponForm(request.POST , request.FILES, instance=coupon)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Coupon updated successfully')
+      return redirect('admin_coupons')
+    else:
+      messages.error(request, 'Invalid input!!!')
+      return redirect('admin_edit_coupon', coupon.id)
+  form = CouponForm(instance=coupon)
+  context = {
+    'coupon':coupon,
+    'form':form,
+  }
+  return render(request, 'admin_panel/coupon_management/admin_edit_coupon.html', context)
+
+@staff_member_required(login_url= 'admin_login')
+def admin_delete_coupon(request, id):
+  coupon = Coupon.objects.get(id = id)
+  coupon.delete()
+  messages.success(request,'Coupon deleted successfully')
+  return redirect('admin_coupons')
+
+@staff_member_required(login_url= 'admin_login')
+def sales_report(request):
+    year = datetime.now().year
+    today = datetime.today()
+    month = today.month
+    years = []
+    today_date=str(date.today())
+    start_date=today_date
+    end_date=today_date
+
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        val = datetime.strptime(end_date, '%Y-%m-%d')
+        end_date = val+timedelta(days=1)
+        orders = Order.objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date),payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    else:
+        orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+    
+    year = today.year
+    for i in range (3):
+        val = year-i
+        years.append(val)
+
+    context = {
+        'orders':orders,
+        'today_date':today_date,
+        'years':years,
+        'start_date':start_date,
+        'end_date':end_date,
+    }
+    return render(request, 'admin_panel/sales_data.html', context)
+
+@staff_member_required(login_url= 'admin_login') 
+def monthwise_sales(request,month):
+    orders = Order.objects.filter(created_at__month = month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity'))
+    today_date=str(date.today())
+    context = {
+        'orders':orders,
+        'today_date':today_date
+    }
+    return render(request,'admin_panel/sales_report_table.html',context)
 
