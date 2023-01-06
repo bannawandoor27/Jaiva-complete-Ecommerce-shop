@@ -15,8 +15,9 @@
           </nav>
         </div>
         {% include 'includes/alerts.html' %}
+
 <div class="row">
-    {% for blog in all_new_blogs %}
+    {% for blog in blogs %}
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
           <div class="card-body">
@@ -127,7 +128,33 @@
       </div>
     </div>
   </div>
-
+</div>
+</div>
+  <nav aria-label="Page navigation example" class="mt-3">
+    <ul class="pagination ">
+      {% if blogs.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ categories.previous_page_number }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+          <span class="sr-only">Previous</span>
+        </a>
+      </li>
+      {% endif %}
+      <li class="page-item"><a class="page-link" href="?page={{ blogs.number }}">{{ blogs.number }}</a></li>
+      {% if blogs.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ blogs.next_page_number }}">{{ blogs.next_page_number }}</a></li>
+      {%endif%}
+  
+      {% if blogs.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ blogs.next_page_number }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+          <span class="sr-only">Next</span>
+        </a>
+      </li>
+      {%endif%}
+    </ul>
+  </nav>
 
 
 

@@ -1,5 +1,4 @@
 from django import forms
-from django.forms import CheckboxInput
 from jaivashop.models import Product, Variation
 from category.models import Category, Sub_Category
 from accounts.models import Account

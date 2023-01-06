@@ -15,7 +15,7 @@ from django.db.models import Q
 from django.db.models import Sum,FloatField
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.cache import never_cache
-from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm, VariationForm,BlogForm
+from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserForm, CouponForm,BlogForm
 from django.core.mail import EmailMessage
 from blog.models import Blog
 from django.core.paginator import Paginator
@@ -179,7 +179,14 @@ def reply_message(request):
     return redirect('admin_messages')
 @staff_member_required(login_url = 'admin_login')
 def admin_blog(request):
-    return render(request,'admin_panel/blog_management/admin_blog.html')
+    blogs = Blog.objects.all()
+    paginator = Paginator(blogs, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {
+      'blogs':page_obj
+    }
+    return render(request,'admin_panel/blog_management/admin_blog.html',context)
 @staff_member_required(login_url = 'admin_login')
 def add_blog(request):
     if request.method == 'POST':
