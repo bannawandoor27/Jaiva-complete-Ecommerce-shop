@@ -41,5 +41,8 @@ urlpatterns = [
     path('admin_add_coupon/',views.admin_add_coupon,name="admin_add_coupon"),
     path('admin_edit_coupon/<int:id>/',views.admin_edit_coupon,name="admin_edit_coupon"),
     path('admin_delete_coupon/<int:id>/',views.admin_delete_coupon,name="admin_delete_coupon"),
+    path('admin_sales_data',views.admin_sales_data,name='admin_sales_data'),
+    # path('monthwise_sales/<int:id>',views.monthwise_sales,name='monthwise_sales'),
+    # path('yearwise_sales/<int:id>',views.yearwise_sales,name='yearwise_sales'),
     
 ]

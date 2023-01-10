@@ -19,6 +19,7 @@ from .forms import LoginForm, ProductForm, CategoryForm, SubCategoryForm, UserFo
 from django.core.mail import EmailMessage
 from blog.models import Blog
 from django.core.paginator import Paginator
+from django.utils import timezone
 @never_cache
 def admin_login(request):
   if 'email' in request.session:
@@ -55,6 +56,7 @@ def admin_logout(request):
     auth.logout(request)
     messages.success(request, "You are logged out.")
     return redirect('admin_login')
+
 @staff_member_required(login_url = 'admin_login')
 def admin_dashboard(request):
     customers_count = Account.objects.filter(is_admin=False).count()
@@ -631,45 +633,44 @@ def admin_delete_coupon(request, id):
   return redirect('admin_coupons')
 
 @staff_member_required(login_url= 'admin_login')
-def sales_report(request):
-    year = datetime.now().year
-    today = datetime.today()
+def admin_sales_data(request):
+    total_orders = Order.objects.filter(is_ordered=True).order_by('created_at')
+    first_order_date = total_orders[0].created_at.date()
+    today = timezone.now()
+    day = today.day
     month = today.month
-    years = []
-    today_date=str(date.today())
-    start_date=today_date
-    end_date=today_date
-
+    year = today.year
+    month_list = []
+    for i in range(1,13):month_list.append(calendar.month_name[i]) 
+    year_list = []
+    for i in range(first_order_date.year,year+1):year_list.append(i)
+    this_date=str(today.date())
+    start_date=this_date
+    end_date=this_date
+    filter= False
+    
     if request.method == 'POST':
         start_date = request.POST.get('start_date')
+        temp = start_date
         end_date = request.POST.get('end_date')
-        val = datetime.strptime(end_date, '%Y-%m-%d')
+        # converting from naive to timezone aware
+        val = timezone.make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
+        start_date = timezone.make_aware(datetime.strptime(temp, '%Y-%m-%d'))
         end_date = val+timedelta(days=1)
-        orders = Order.objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date),payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
+        filter=True
+        orders = Order.objects.filter(Q(created_at__lte=end_date),Q(created_at__gte=start_date)).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
     else:
-        orders = Order.objects.filter(created_at__year = year,created_at__month=month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
-    
-    year = today.year
-    for i in range (3):
-        val = year-i
-        years.append(val)
+        orders = Order.objects.filter(created_at__year = year,created_at__month=month).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity')).order_by('-total')
 
     context = {
+        'month_list':month_list,
         'orders':orders,
-        'today_date':today_date,
-        'years':years,
+        'this_date':this_date,
+        'year_list':year_list,
         'start_date':start_date,
         'end_date':end_date,
+        'filter':filter
+        
     }
-    return render(request, 'admin_panel/sales_data.html', context)
-
-@staff_member_required(login_url= 'admin_login') 
-def monthwise_sales(request,month):
-    orders = Order.objects.filter(created_at__month = month,payment__status = True).values('user_order_page__product__product_name','user_order_page__product__stock',total = Sum('order_total'),).annotate(dcount=Sum('user_order_page__quantity'))
-    today_date=str(date.today())
-    context = {
-        'orders':orders,
-        'today_date':today_date
-    }
-    return render(request,'admin_panel/sales_report_table.html',context)
+    return render(request, 'admin_panel/admin_sales_data.html', context)
 

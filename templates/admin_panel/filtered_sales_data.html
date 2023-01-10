@@ -1,0 +1,64 @@
+{% load static %}
+
+{% if orders %}
+
+<div class="table-responsive mt-3 pt-3" style="background-color: #000000;" >
+  <div class="d-flex justify-content-center mb-3 mr-3">
+    <input type="button" class="btn btn-inverse-danger btn-md mr-3 text-white" id="btnExport" value="Download PDF Report" />
+  </div>
+  <table class="table" id="filtered_sales_data">
+      <thead>
+       {% if filter %}
+       <h4 class="text-center"> Sales data from {{start_date|date}} To {{end_date|date}} </h4>
+       {% endif %}
+        <tr>
+          <th>
+            No.
+          </th>
+          <th>
+            Product Name
+          </th>
+          <th>
+            Item Sold
+          </th>
+          <th>
+            Stock
+          </th>
+
+          <th>
+            Amount Received
+          </th>
+        </tr>
+      </thead>
+      
+      {% for order in orders %}
+      {% if  order.user_order_page__product__product_name %}
+      <tbody>
+        <tr class="table">
+          <td>
+            {{forloop.counter}}
+          </td>
+          <td>
+            {{order.user_order_page__product__product_name}}
+          </td>
+          <td>
+            {{order.dcount}}
+          </td>
+          <td>
+            {{order.user_order_page__product__stock}}  
+          </td>
+          
+          <td>
+            ₹{{order.total}}
+          </td>
+        </tr>
+      </tbody>
+      {% endif %}
+      {%endfor%}
+    </table>
+</div>
+{% else %}
+
+<h3 class="h3 text-center text-white">No items sold in this date</h3>
+
+{% endif %}
